@@ -60,7 +60,7 @@
       color: #ffecd1; -webkit-tap-highlight-color: transparent;
     }
     .hdr-act { flex: 1 1 0; gap: 14px !important; font-size: 18px !important; }
-    .hdr-logo { width: 104px !important; height: 44px !important; }
+    .hdr-logo { width: 104px !important; }
 
     /* panel de menu: pantalla completa y desplazable */
     .menu-panel {
@@ -115,7 +115,7 @@
   @media (max-width: 380px) {
     .hdr { padding: 10px 12px !important; }
     .hdr-act { font-size: 16px !important; gap: 10px !important; }
-    .hdr-logo { width: 92px !important; height: 40px !important; }
+    .hdr-logo { width: 92px !important; }
     .atl-stats { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
   }
 </style>
@@ -128,8 +128,8 @@
       <span onMouseEnter="{{ openMenu }}" onClick="{{ goCatalogo }}" style="cursor:pointer;color:{{ hdrInk }};opacity:0.9" style-hover="opacity:1">Catálogo</span>
       <a href="#atelier" onMouseEnter="{{ closeMenu }}" onClick="{{ goAtelier }}" style="color:{{ hdrInk }};opacity:0.9" style-hover="opacity:1">Nosotros</a>
     </nav>
-    <a href="#top" onClick="{{ goHome }}" class="hdr-logo" style="flex:0 0 auto;position:relative;display:block;width:112px;height:48px;overflow:hidden">
-      <img src="uploads/IMG_3538.PNG" alt="Blossom" style="position:absolute;width:154px;height:154px;left:-22px;top:-50px" />
+    <a href="#top" onClick="{{ goHome }}" class="hdr-logo" style="flex:0 0 auto;display:block;width:112px;line-height:0">
+      <img src="uploads/logo-blossom-crema.png" alt="Blossom" style="display:block;width:100%;height:auto" />
     </a>
     <div class="hdr-act" style="display:flex;align-items:center;justify-content:flex-end;gap:22px;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:21px;letter-spacing:0.01em;flex:1 1 0;min-width:0">
       <span class="hdr-search" style="color:{{ hdrInk }};opacity:0.8;cursor:pointer" style-hover="opacity:1">Buscar</span>
@@ -603,8 +603,8 @@
   <footer id="site-footer" style="background:#ffecd1;color:#3e000c;border-top:1px solid rgba(62,0,12,0.16);padding:clamp(44px,5vw,76px) clamp(20px,5vw,64px) 0">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:40px 30px;padding-bottom:50px">
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div style="position:relative;width:144px;height:62px;overflow:hidden">
-          <img src="uploads/IMG_3537.PNG" alt="Blossom" style="position:absolute;width:199px;height:199px;left:-28px;top:-64px" />
+        <div style="width:144px;line-height:0">
+          <img src="uploads/logo-blossom-bordo.png" alt="Blossom" style="display:block;width:100%;height:auto" />
         </div>
         <p style="margin:0;font-size:13.5px;line-height:1.7;font-weight:500;opacity:0.82;max-width:26ch">Lencería fina en series cortas. Asunción, Paraguay.</p>
         <div style="display:flex;gap:16px;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;margin-top:4px">
