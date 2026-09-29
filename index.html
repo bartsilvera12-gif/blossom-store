@@ -22,6 +22,9 @@
   input::placeholder { color: rgba(255,236,209,0.45); }
   img, svg, video, image-slot { max-width: 100%; }
 
+  /* la portada arranca debajo del header para que se vea a traves de el */
+  .hero { margin-top: calc(var(--hdr, 74px) * -1); }
+
   /* ---- boton de menu (solo movil) ---- */
   .hdr-burger { display: none; }
   .hdr-burger i {
@@ -122,7 +125,7 @@
 </helmet>
 <div style="background:#3e000c;color:#ffecd1;font-family:Jost,'Helvetica Neue',sans-serif;font-weight:300;overflow-x:hidden">
 
-  <header class="hdr" style="position:sticky;top:0;z-index:50;background:{{ hdrBg }};backdrop-filter:blur(10px);color:{{ hdrInk }};display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(18px,4vw,56px);border-bottom:1px solid {{ hdrBorder }}">
+  <header class="hdr" style="position:sticky;top:0;z-index:50;background:{{ hdrBg }};backdrop-filter:{{ hdrBlur }};-webkit-backdrop-filter:{{ hdrBlur }};color:{{ hdrInk }};display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(18px,4vw,56px);border-bottom:1px solid {{ hdrBorder }};transition:background .35s ease,border-color .35s ease">
     <span class="hdr-burger" onClick="{{ toggleMenu }}" role="button" tabindex="0" aria-label="Menú" aria-expanded="{{ menuOpen }}"><i></i><i></i><i></i></span>
     <nav class="hdr-nav" style="display:flex;gap:28px;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:22px;letter-spacing:0.01em;flex:1 1 0;min-width:0">
       <span onMouseEnter="{{ openMenu }}" onClick="{{ goCatalogo }}" style="cursor:pointer;color:{{ hdrInk }};opacity:0.9" style-hover="opacity:1">Catálogo</span>
@@ -690,10 +693,11 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { bag: [], bagOpen: false, policyOpen: false, toast: "", view: "home", menuOpen: false, cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M" };
+  state = { bag: [], bagOpen: false, policyOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M" };
 
   componentDidMount() {
     requestAnimationFrame(() => this.reveal());
+    this.setupScrollWatch();
     this.syncHeader();
     this._hdrTimer = setInterval(() => this.syncHeader(), 500);
     this.setupFooterWatch();
@@ -706,6 +710,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._hdrTimer) clearInterval(this._hdrTimer);
     if (this._featTimer) clearInterval(this._featTimer);
     if (this._footTimer) clearInterval(this._footTimer);
@@ -714,6 +719,21 @@ class Component extends DCLogic {
 
   featuredList() {
     return this.catalog().filter((it) => ["c1", "c3", "c11", "c7", "c8", "c12"].indexOf(it.slot) >= 0);
+  }
+
+  setupScrollWatch() {
+    if (this._onScroll) return;
+    this._scrolled = false;
+    this._onScroll = () => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      const next = y > 24;
+      // se compara contra un campo propio: this.state puede quedar viejo dentro del listener
+      if (next === this._scrolled) return;
+      this._scrolled = next;
+      this.setState({ scrolled: next });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
   }
 
   syncHeader() {
@@ -975,6 +995,8 @@ class Component extends DCLogic {
 
   renderVals() {
     const bag = this.state.bag;
+    // el header solo es transparente en la portada, arriba de todo y con el menu cerrado
+    const clearHdr = this.state.view === "home" && !this.state.scrolled && !this.state.menuOpen && !this.state.bagOpen;
     return {
       bag,
       bagCount: bag.reduce((n, l) => n + l.qty, 0),
@@ -988,9 +1010,10 @@ class Component extends DCLogic {
       isLookbook: this.state.view === "lookbook",
       isAtelier: this.state.view === "atelier",
       isProducto: this.state.view === "producto",
-      hdrBg: "rgba(62,0,12,0.93)",
+      hdrBg: clearHdr ? "transparent" : "rgba(62,0,12,0.93)",
+      hdrBlur: clearHdr ? "none" : "blur(10px)",
       hdrInk: "#ffecd1",
-      hdrBorder: "rgba(255,236,209,0.14)",
+      hdrBorder: clearHdr ? "transparent" : "rgba(255,236,209,0.14)",
       hdrLine: "rgba(255,236,209,0.45)",
       goHome: this.nav("home"),
       goCatalogo: this.nav("catalogo"),
