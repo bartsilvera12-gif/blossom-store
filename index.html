@@ -48,6 +48,11 @@
     .feat-arrow-img  { display: none !important; }
   }
 
+  /* El envoltorio usa overflow-x:clip y no hidden. Con hidden el navegador
+     calcula overflow-y:auto, lo convierte en contenedor de scroll y eso anula
+     el position:sticky del header: se iba con la pagina y los paneles del
+     buscador y del menu, que son fixed bajo el header, quedaban flotando. */
+
   /* la portada arranca debajo del header para que se vea a traves de el */
   .hero { margin-top: calc(var(--hdr, 74px) * -1); }
 
@@ -159,7 +164,7 @@
   }
 </style>
 </helmet>
-<div style="background:#3e000c;color:#ffecd1;font-family:Jost,'Helvetica Neue',sans-serif;font-weight:300;overflow-x:hidden">
+<div style="background:#3e000c;color:#ffecd1;font-family:Jost,'Helvetica Neue',sans-serif;font-weight:300;overflow-x:clip">
 
   <header class="hdr" style="position:sticky;top:0;z-index:50;background:{{ hdrBg }};backdrop-filter:{{ hdrBlur }};-webkit-backdrop-filter:{{ hdrBlur }};color:{{ hdrInk }};display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px clamp(18px,4vw,56px);border-bottom:1px solid {{ hdrBorder }};transition:background .35s ease,border-color .35s ease">
     <span class="hdr-burger" onClick="{{ toggleMenu }}" role="button" tabindex="0" aria-label="Menú" aria-expanded="{{ menuOpen }}"><i></i><i></i><i></i></span>
