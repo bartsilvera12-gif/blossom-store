@@ -283,10 +283,6 @@
           <span style="font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;opacity:0.6">Selección</span>
           <h2 class="feat-title" style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:clamp(40px,6vw,80px);margin:6px 0 0;letter-spacing:0.01em;line-height:1">Productos destacados</h2>
         </div>
-        <div style="display:flex;gap:10px">
-          <span onClick="{{ featPrev }}" style="cursor:pointer;width:44px;height:44px;border:1px solid rgba(255,236,209,0.35);display:flex;align-items:center;justify-content:center;font-size:16px" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">←</span>
-          <span onClick="{{ featNext }}" style="cursor:pointer;width:44px;height:44px;border:1px solid rgba(255,236,209,0.35);display:flex;align-items:center;justify-content:center;font-size:16px" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">→</span>
-        </div>
       </div>
 
       <div style="position:relative;overflow:hidden">
@@ -298,6 +294,8 @@
                   <div style="position:absolute;inset:0;transition:transform 1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.05)">
                     <image-slot id="{{ fp.slot }}" src="{{ fp.src }}" shape="rect" fit="cover" placeholder="Pieza destacada"></image-slot>
                   </div>
+                  <span onClick="{{ featPrev }}" aria-label="Anterior" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">←</span>
+                  <span onClick="{{ featNext }}" aria-label="Siguiente" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">→</span>
                 </div>
               </div>
               <div style="display:flex;flex-direction:column;gap:18px">
@@ -912,8 +910,8 @@ class Component extends DCLogic {
         op: k === i ? 1 : 0.5,
         pick: () => this.setState({ feat: k }),
       })),
-      featNext: () => this.setState((s) => ({ feat: (s.feat + 1) % total })),
-      featPrev: () => this.setState((s) => ({ feat: (s.feat - 1 + total) % total })),
+      featNext: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState((s) => ({ feat: (s.feat + 1) % total })); },
+      featPrev: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState((s) => ({ feat: (s.feat - 1 + total) % total })); },
     };
   }
 
