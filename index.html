@@ -360,8 +360,8 @@
                   <div style="position:absolute;inset:0;transition:transform 1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.05)">
                     <image-slot id="{{ fp.slot }}" src="{{ fp.src }}" shape="rect" fit="cover" placeholder="Pieza destacada"></image-slot>
                   </div>
-                  <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-img" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">←</span>
-                  <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-img" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">→</span>
+                  <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-img" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">←</span>
+                  <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-img" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">→</span>
                 </div>
               </div>
               <div style="display:flex;flex-direction:column;gap:18px">
@@ -377,8 +377,8 @@
             </div>
           </sc-for>
         </div>
-        <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-side" style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#3e000c">←</span>
-        <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-side" style="position:absolute;top:50%;right:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#3e000c">→</span>
+        <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-side" style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">←</span>
+        <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-side" style="position:absolute;top:50%;right:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">→</span>
       </div>
 
       <div style="display:flex;gap:10px;justify-content:center;margin-top:clamp(24px,3vw,40px);flex-wrap:wrap">
@@ -523,8 +523,8 @@
             <div style="position:relative;aspect-ratio:4/5;overflow:hidden">
               <image-slot id="{{ product.mainSlot }}" src="{{ product.mainSrc }}" shape="rect" fit="cover" placeholder="Pieza"></image-slot>
               <sc-if value="{{ product.hasMany }}" hint-placeholder-val="{{ false }}">
-                <span onClick="{{ product.prev }}" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">←</span>
-                <span onClick="{{ product.next }}" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">→</span>
+                <span onClick="{{ product.prev }}" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">←</span>
+                <span onClick="{{ product.next }}" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">→</span>
               </sc-if>
             </div>
           </div>
