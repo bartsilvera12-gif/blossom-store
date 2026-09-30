@@ -551,6 +551,20 @@
           <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.62;border-top:1px solid rgba(255,236,209,0.18);border-bottom:1px solid rgba(255,236,209,0.18);padding:16px 0">{{ product.detail }}</div>
           <p style="margin:0;font-size:15px;line-height:1.85;opacity:0.78;max-width:46ch;text-wrap:pretty">{{ product.desc }}</p>
 
+          <sc-if value="{{ product.hasColors }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <span style="font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.6">Color</span>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <sc-for list="{{ product.colors }}" as="col" hint-placeholder-count="2">
+                <span onClick="{{ col.pick }}" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 16px 9px 10px;border:1px solid rgba(255,236,209,0.3);opacity:{{ col.op }}" style-hover="border-color:#ffecd1">
+                  <span style="width:18px;height:18px;border-radius:50%;background:{{ col.hex }};outline:{{ col.ring }};outline-offset:2px;flex:0 0 auto"></span>
+                  <span style="font-size:12.5px;letter-spacing:0.08em">{{ col.label }}</span>
+                </span>
+              </sc-for>
+            </div>
+          </div>
+          </sc-if>
+
           <div style="display:flex;flex-direction:column;gap:10px">
             <span style="font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.6">Talle</span>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -561,7 +575,7 @@
           </div>
 
           <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
-            <button onClick="{{ addToBag }}" data-name="{{ product.name }}" style="flex:1 1 200px;background:#ffecd1;color:#3e000c;border:none;font-family:Jost,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;padding:17px 30px;cursor:pointer" style-hover="background:#ffffff">Agregar a la bolsa</button>
+            <button onClick="{{ product.add }}" style="flex:1 1 200px;background:#ffecd1;color:#3e000c;border:none;font-family:Jost,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;padding:17px 30px;cursor:pointer" style-hover="background:#ffffff">Agregar a la bolsa</button>
             <button onClick="{{ toggleBag }}" style="flex:0 0 auto;background:transparent;color:#ffecd1;border:1px solid rgba(255,236,209,0.35);font-family:Jost,sans-serif;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;padding:17px 26px;cursor:pointer" style-hover="border-color:#ffecd1">Ver bolsa</button>
           </div>
 
@@ -775,6 +789,9 @@
               </span>
               <span style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:9px">
                 <span style="font-family:Jost,sans-serif;font-weight:200;font-size:17px;line-height:1.2">{{ line.name }}</span>
+                <sc-if value="{{ line.hasVariante }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:11.5px;letter-spacing:0.08em;opacity:0.65">{{ line.variante }}</span>
+                </sc-if>
                 <span style="font-size:13px;opacity:0.75">{{ line.line }}</span>
                 <span style="display:flex;align-items:center;gap:0;margin-top:2px">
                   <span onClick="{{ line.less }}" aria-label="Quitar uno" style="cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,236,209,0.3);font-size:15px;line-height:1" style-hover="border-color:#ffecd1">−</span>
@@ -815,7 +832,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "90" };
+  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "90" };
 
   componentDidMount() {
     requestAnimationFrame(() => this.reveal());
@@ -925,18 +942,18 @@ class Component extends DCLogic {
   catalog() {
     const px = (id, w) => 'https://images.pexels.com/photos/' + id + '/pexels-photo-' + id + '.jpeg?auto=compress&cs=tinysrgb&w=' + (w || 900);
     return [
-      { slot: 'c1', name: 'Conjunto Aurore', cat: 'Conjuntos', p: 385000, detail: 'Chantilly · Bordó', src: 'uploads/pexels-alexandros-iosifidis-82664041-8814538.jpg' },
-      { slot: 'c2', name: 'Corsé Camélia', cat: 'Corsetería', p: 520000, detail: 'Satén de seda · Crema', src: px(28748986) },
-      { slot: 'c3', name: 'Bata Nuit', cat: 'Batas', p: 640000, detail: 'Satén de seda · Bordó', src: px(7162037) },
-      { slot: 'c4', name: 'Body Colette', cat: 'Conjuntos', p: 470000, detail: 'Tul bordado · Nude', src: px(7642452) },
-      { slot: 'c5', name: 'Sujetador Aimée', cat: 'Corsetería', p: 295000, detail: 'Satén de seda · Crema', src: px(6568233) },
-      { slot: 'c6', name: 'Conjunto Vignette', cat: 'Conjuntos', p: 410000, detail: 'Encaje Leavers · Crema', src: px(34389631) },
-      { slot: 'c7', name: 'Conjunto Solange', cat: 'Conjuntos', p: 365000, detail: 'Encaje floral · Crema', src: 'uploads/pexels-karola-g-7281288.jpg' },
-      { slot: 'c8', name: 'Camisón Ondine', cat: 'Dormir', p: 480000, detail: 'Seda al bies · Crema', src: px(7881229) },
-      { slot: 'c9', name: 'Slip Margaux', cat: 'Dormir', p: 260000, detail: 'Seda lavada · Crema', src: px(6568241) },
-      { slot: 'c10', name: 'Bata Céleste', cat: 'Batas', p: 590000, detail: 'Seda lavada · Crema', src: px(16455727) },
-      { slot: 'c11', name: 'Corsé Beaumont', cat: 'Corsetería', p: 560000, detail: 'Encaje y tul · Bordó', src: px(28748993) },
-      { slot: 'c12', name: 'Body Lumière', cat: 'Conjuntos', p: 445000, detail: 'Tul bordado · Bordó', src: px(7642453) },
+      { slot: 'c1', name: 'Conjunto Aurore', cat: 'Conjuntos', p: 385000, detail: 'Chantilly · Bordó', src: 'uploads/pexels-alexandros-iosifidis-82664041-8814538.jpg', colors: ["Bordó", "Crema", "Nude"] },
+      { slot: 'c2', name: 'Corsé Camélia', cat: 'Corsetería', p: 520000, detail: 'Satén de seda · Crema', src: px(28748986), colors: ["Crema", "Bordó"] },
+      { slot: 'c3', name: 'Bata Nuit', cat: 'Batas', p: 640000, detail: 'Satén de seda · Bordó', src: px(7162037), colors: ["Bordó", "Crema"] },
+      { slot: 'c4', name: 'Body Colette', cat: 'Conjuntos', p: 470000, detail: 'Tul bordado · Nude', src: px(7642452), colors: ["Nude", "Bordó", "Crema"] },
+      { slot: 'c5', name: 'Sujetador Aimée', cat: 'Corsetería', p: 295000, detail: 'Satén de seda · Crema', src: px(6568233), colors: ["Crema", "Nude"] },
+      { slot: 'c6', name: 'Conjunto Vignette', cat: 'Conjuntos', p: 410000, detail: 'Encaje Leavers · Crema', src: px(34389631), colors: ["Crema", "Bordó"] },
+      { slot: 'c7', name: 'Conjunto Solange', cat: 'Conjuntos', p: 365000, detail: 'Encaje floral · Crema', src: 'uploads/pexels-karola-g-7281288.jpg', colors: ["Crema", "Nude"] },
+      { slot: 'c8', name: 'Camisón Ondine', cat: 'Dormir', p: 480000, detail: 'Seda al bies · Crema', src: px(7881229), colors: ["Crema", "Bordó"] },
+      { slot: 'c9', name: 'Slip Margaux', cat: 'Dormir', p: 260000, detail: 'Seda lavada · Crema', src: px(6568241), colors: ["Crema", "Nude", "Bordó"] },
+      { slot: 'c10', name: 'Bata Céleste', cat: 'Batas', p: 590000, detail: 'Seda lavada · Crema', src: px(16455727), colors: ["Crema", "Bordó"] },
+      { slot: 'c11', name: 'Corsé Beaumont', cat: 'Corsetería', p: 560000, detail: 'Encaje y tul · Bordó', src: px(28748993), colors: ["Bordó", "Crema"] },
+      { slot: 'c12', name: 'Body Lumière', cat: 'Conjuntos', p: 445000, detail: 'Tul bordado · Bordó', src: px(7642453), colors: ["Bordó", "Nude"] },
     ];
   }
 
@@ -946,6 +963,13 @@ class Component extends DCLogic {
 
   // Numero provisorio. Cambiar aca y queda actualizado en la burbuja,
   // en el pie y en el boton de finalizar compra.
+  // Paleta de la coleccion. El hexadecimal es solo la muestra que se ve
+  // en la ficha; ajustar si cambian los tonos reales.
+  colorHex(nombre) {
+    const mapa = { "Bordó": "#52000F", "Crema": "#FFECD1", "Nude": "#E3C3A8" };
+    return mapa[nombre] || "#FFECD1";
+  }
+
   waNumber() {
     return '595971000000';
   }
@@ -981,7 +1005,9 @@ class Component extends DCLogic {
   }
 
   openProduct(slot) {
-    this.setState({ view: "producto", product: slot, gIndex: 0, size: "M", menuOpen: false, bagOpen: false });
+    const it = this.catalog().find((x) => x.slot === slot);
+    const color = it && it.colors && it.colors.length ? it.colors[0] : "";
+    this.setState({ view: "producto", product: slot, gIndex: 0, size: "90", color: color, menuOpen: false, bagOpen: false });
   }
 
   productVals() {
@@ -991,6 +1017,8 @@ class Component extends DCLogic {
     const gal = this.galleryFor(it);
     const gi = Math.min(this.state.gIndex, gal.length - 1);
     const sizes = ["85", "90", "95", "100"];
+    const opciones = it.colors || [];
+    const color = opciones.indexOf(this.state.color) >= 0 ? this.state.color : (opciones[0] || "");
     const similar = all.filter((x) => x.cat === it.cat && x.slot !== it.slot).slice(0, 4);
     const simList = similar.length ? similar : all.filter((x) => x.slot !== it.slot).slice(0, 4);
     return {
@@ -1018,6 +1046,16 @@ class Component extends DCLogic {
           fg: this.state.size === label ? "#3e000c" : "#ffecd1",
           pick: () => this.setState({ size: label }),
         })),
+        colorName: color,
+        hasColors: opciones.length > 1,
+        colors: opciones.map((label) => ({
+          label,
+          hex: this.colorHex(label),
+          ring: color === label ? "2px solid #ffecd1" : "1px solid rgba(255,236,209,0.35)",
+          op: color === label ? "1" : "0.6",
+          pick: () => this.setState({ color: label }),
+        })),
+        add: () => this.addLine(it.name, { size: this.state.size, color: color }),
         similar: simList.map((x) => ({
           slot: "pdp-sim-" + x.slot,
           name: x.name,
@@ -1314,22 +1352,33 @@ class Component extends DCLogic {
     ];
   }
 
-  addLine(name) {
+  addLine(name, opts) {
     const it = this.catalog().find((x) => x.name === name);
+    const size = (opts && opts.size) || "";
+    const color = (opts && opts.color) || "";
+    const key = name + "|" + size + "|" + color;
     this.setState((s) => {
       const next = s.bag.map((l) => ({ ...l }));
-      const hit = next.find((l) => l.name === name);
+      const hit = next.find((l) => l.key === key);
       if (hit) hit.qty += 1;
-      else next.push({ name, qty: 1, src: it ? it.src : "", slot: it ? it.slot : "", p: it ? it.p : 0 });
+      else next.push({ key, name, size, color, qty: 1, src: it ? it.src : "", slot: it ? it.slot : "", p: it ? it.p : 0 });
       return { bag: next };
     });
     this.flash("Agregado a la bolsa");
   }
 
-  changeQty(name, delta) {
+  // Texto "Talle 90 · Bordó" para la bolsa y para el pedido.
+  variante(l) {
+    const partes = [];
+    if (l.size) partes.push("Talle " + l.size);
+    if (l.color) partes.push(l.color);
+    return partes.join(" · ");
+  }
+
+  changeQty(key, delta) {
     this.setState((s) => {
       const next = s.bag.map((l) => ({ ...l }));
-      const hit = next.find((l) => l.name === name);
+      const hit = next.find((l) => l.key === key);
       if (!hit) return {};
       hit.qty += delta;
       return { bag: next.filter((l) => l.qty > 0) };
@@ -1352,10 +1401,12 @@ class Component extends DCLogic {
         name: l.name,
         qty: l.qty,
         src: l.src,
+        variante: this.variante(l),
+        hasVariante: !!this.variante(l),
         slot: "bag-" + (l.slot || l.name),
         line: this.money((l.p || 0) * l.qty),
-        more: () => this.changeQty(l.name, 1),
-        less: () => this.changeQty(l.name, -1)
+        more: () => this.changeQty(l.key, 1),
+        less: () => this.changeQty(l.key, -1)
       })),
       bagCount: bag.reduce((n, l) => n + l.qty, 0),
       bagEmpty: bag.length === 0,
@@ -1404,10 +1455,15 @@ class Component extends DCLogic {
       waLink: this.waLink(""),
       checkout: () => {
         if (!bag.length) return;
-        const lineas = bag.map((l) => "• " + l.name + " x" + l.qty + " — " + this.money((l.p || 0) * l.qty)).join("\n");
+        const lineas = bag.map((l) => {
+          const v = this.variante(l);
+          return "• " + l.name + (v ? " (" + v + ")" : "") + " x" + l.qty + " — " + this.money((l.p || 0) * l.qty);
+        }).join("\n");
+        const faltaTalle = bag.some((l) => !l.size);
         const msg = "¡Hola Blossom! Quiero hacer este pedido:\n\n" + lineas +
                     "\n\nTotal: " + this.money(bagTotal) +
-                    "\n\nMi nombre:\nCiudad / dirección de entrega:\nTalle:";
+                    "\n\nMi nombre:\nCiudad / dirección de entrega:" +
+                    (faltaTalle ? "\nTalle:" : "");
         window.open(this.waLink(msg), "_blank", "noopener");
       },
       stop: (e) => e.stopPropagation(),
