@@ -22,6 +22,24 @@
   input::placeholder { color: rgba(255,236,209,0.45); }
   img, svg, video, image-slot { max-width: 100%; }
 
+  /* tablas de las paginas de ayuda y legales */
+  .info-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .info-table-inner { min-width: 560px; }
+  .it-row {
+    display: grid; grid-template-columns: 0.8fr 1fr 1fr 1fr; gap: 16px;
+    padding: 13px 0; border-bottom: 1px solid rgba(255,236,209,0.16);
+    font-size: 14px; line-height: 1.5;
+  }
+  .it-row > span:first-child { font-weight: 400; }
+  .it-head {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 500; opacity: 0.75; border-bottom-color: rgba(255,236,209,0.4);
+  }
+  .it-row:last-child { border-bottom: 0; }
+
+  /* buscador */
+  .search-panel input::placeholder { color: rgba(62,0,12,0.42); }
+
   /* flechas del carrusel: a los costados del bloque en escritorio,
      sobre la imagen en celular, donde la foto ya ocupa todo el ancho */
   .feat-arrow-side { display: none; }
@@ -118,6 +136,13 @@
     /* areas de toque comodas */
     button, .hero-cta { min-height: 48px; }
 
+    /* lupa en el header, ya que el texto "Buscar" se oculta */
+    .hdr-search-ico { display: flex !important; }
+
+    /* tablas: se pueden desplazar en horizontal */
+    .info-table-inner { min-width: 520px; }
+    .it-row { font-size: 13px; gap: 12px; }
+
     /* burbuja de WhatsApp y avisos, sobre el area segura del telefono */
     #wa-bubble { right: 16px !important; bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
   }
@@ -143,10 +168,46 @@
       <img src="uploads/logo-blossom-crema.png" alt="Blossom" style="display:block;width:100%;height:auto" />
     </a>
     <div class="hdr-act" style="display:flex;align-items:center;justify-content:flex-end;gap:22px;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:21px;letter-spacing:0.01em;flex:1 1 0;min-width:0">
-      <span class="hdr-search" style="color:{{ hdrInk }};opacity:0.8;cursor:pointer" style-hover="opacity:1">Buscar</span>
+      <span class="hdr-search" onClick="{{ toggleSearch }}" style="color:{{ hdrInk }};opacity:0.8;cursor:pointer" style-hover="opacity:1">Buscar</span>
+      <span class="hdr-search-ico" onClick="{{ toggleSearch }}" aria-label="Buscar" style="display:none;cursor:pointer;color:{{ hdrInk }};align-items:center;justify-content:center;width:44px;height:44px;margin-right:-8px">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+      </span>
       <span onClick="{{ toggleBag }}" style="cursor:pointer;color:{{ hdrInk }};border-bottom:1px solid {{ hdrLine }};padding-bottom:2px;white-space:nowrap">Bolsa · {{ bagCount }}</span>
     </div>
   </header>
+
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="search-panel" style="position:fixed;left:0;right:0;top:var(--hdr,74px);z-index:49;background:#ffecd1;color:#3e000c;border-bottom:1px solid rgba(62,0,12,0.12);box-shadow:0 24px 50px rgba(20,0,5,0.4);max-height:calc(100dvh - var(--hdr,74px));overflow-y:auto">
+      <div style="max-width:900px;margin:0 auto;padding:clamp(20px,3vw,34px) clamp(20px,5vw,40px) clamp(24px,3vw,38px)">
+        <div style="display:flex;align-items:center;gap:14px;border-bottom:1px solid rgba(62,0,12,0.3);padding-bottom:12px">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#3e000c" stroke-width="1.6" aria-hidden="true" style="flex:0 0 auto;opacity:0.6"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.6-3.6"></path></svg>
+          <input id="buscador" type="text" onInput="{{ onSearch }}" placeholder="Buscar por nombre, categoría o material" style="flex:1 1 auto;min-width:0;border:0;outline:0;background:transparent;color:#3e000c;font-family:Jost,sans-serif;font-weight:300;font-size:clamp(18px,2.4vw,26px);letter-spacing:0.02em;padding:4px 0" />
+          <span onClick="{{ closeSearch }}" aria-label="Cerrar" style="cursor:pointer;font-size:24px;line-height:1;opacity:0.5;flex:0 0 auto;padding:0 4px">×</span>
+        </div>
+
+        <sc-if value="{{ searchHasHits }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.6;padding:16px 0 4px">{{ searchCount }}</div>
+          <sc-for list="{{ searchHits }}" as="h" hint-placeholder-count="3">
+            <a href="#producto" onClick="{{ h.open }}" style="display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid rgba(62,0,12,0.12);color:#3e000c" style-hover="opacity:0.6">
+              <span style="flex:0 0 auto;width:56px;height:70px;overflow:hidden;background:rgba(62,0,12,0.08)">
+                <img src="{{ h.src }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block" />
+              </span>
+              <span style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:5px">
+                <span style="font-size:9.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.55">{{ h.cat }}</span>
+                <span style="font-family:Jost,sans-serif;font-weight:300;font-size:16px;letter-spacing:0.06em;text-transform:uppercase">{{ h.name }}</span>
+              </span>
+              <span style="flex:0 0 auto;font-size:13px;opacity:0.75;white-space:nowrap">{{ h.price }}</span>
+            </a>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:Jost,sans-serif;font-weight:200;font-size:19px;opacity:0.7;margin:22px 0 0">No encontramos piezas con ese nombre. Probá con “encaje”, “seda” o “corsé”.</p>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
 
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
     <div onMouseLeave="{{ closeMenu }}" class="menu-panel" style="position:fixed;left:0;right:0;top:var(--hdr,74px);z-index:48;background:#ffecd1;color:#3e000c;border-bottom:1px solid rgba(62,0,12,0.12);box-shadow:0 24px 50px rgba(20,0,5,0.4)">
@@ -328,12 +389,12 @@
   </section>
 
   <section style="background-image:linear-gradient(rgba(255,236,209,0.55),rgba(255,236,209,0.55)),url('uploads/Imagen de ChatGPT 29 sept 2026, 14_02_40.png');background-size:cover;background-position:center;color:#3e000c;padding:clamp(56px,7vw,110px) clamp(20px,5vw,64px);text-align:center">
-    <span style="display:block;font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;opacity:0.5">Nuestra idea de lujo</span>
+    <span style="display:block;font-size:11px;letter-spacing:0.34em;text-transform:uppercase;font-weight:500;color:#3e000c;opacity:0.95">Nuestra idea de lujo</span>
     <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:clamp(34px,5vw,64px);line-height:1.3;margin:22px auto 30px;max-width:20ch;letter-spacing:0.01em;text-wrap:balance">«Que nadie más lo vea y que igual te cambie el día.»</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:14px">
-      <span style="width:44px;height:1px;background:rgba(62,0,12,0.3)"></span>
-      <span style="font-size:10.5px;letter-spacing:0.28em;text-transform:uppercase;opacity:0.6">Blossom, 2026</span>
-      <span style="width:44px;height:1px;background:rgba(62,0,12,0.3)"></span>
+      <span style="width:44px;height:1px;background:rgba(62,0,12,0.55)"></span>
+      <span style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:#3e000c;opacity:0.95">Blossom, 2026</span>
+      <span style="width:44px;height:1px;background:rgba(62,0,12,0.55)"></span>
     </div>
   </section>
 
@@ -368,20 +429,20 @@
   </sc-if>
 
   <sc-if value="{{ isCatalogo }}" hint-placeholder-val="{{ false }}">
-    <div style="background:#2B0008;padding:clamp(30px,4vw,54px) clamp(20px,5vw,64px) 0;display:flex;align-items:baseline;gap:12px;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase">
+    <div style="background:#43000F;padding:clamp(30px,4vw,54px) clamp(20px,5vw,64px) 0;display:flex;align-items:baseline;gap:12px;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase">
       <a href="#top" onClick="{{ goHome }}" style="opacity:0.55">Blossom</a>
       <span style="opacity:0.35">/</span>
       <span>Colección</span>
     </div>
-    <section style="background:#2B0008;padding:clamp(22px,3vw,40px) clamp(20px,5vw,64px) clamp(26px,3vw,40px)">
+    <section style="background:#43000F;padding:clamp(22px,3vw,40px) clamp(20px,5vw,64px) clamp(26px,3vw,40px)">
       <div style="max-width:1500px;margin:0 auto">
         <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;border-bottom:1px solid rgba(255,236,209,0.2);padding-bottom:20px">
           <div>
             <h2 style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(30px,4.4vw,58px);margin:0;letter-spacing:0.03em;text-transform:uppercase">Catálogo</h2>
-            <div style="font-size:12px;opacity:0.6;margin-top:10px;letter-spacing:0.08em">{{ count }} piezas</div>
+            <div style="font-size:12.5px;opacity:0.85;margin-top:10px;letter-spacing:0.08em">{{ count }} piezas</div>
           </div>
           <div class="sortbar" style="display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;padding-bottom:6px">
-            <span style="opacity:0.5">Ordenar</span>
+            <span style="opacity:0.8">Ordenar</span>
             <span onClick="{{ setSortRel }}" style="cursor:pointer;border-bottom:1px solid rgba(255,236,209,0.3);padding-bottom:3px" style-hover="border-color:#ffecd1">Relevancia</span>
             <span onClick="{{ setSortAsc }}" style="cursor:pointer;border-bottom:1px solid rgba(255,236,209,0.3);padding-bottom:3px" style-hover="border-color:#ffecd1">Menor precio</span>
             <span onClick="{{ setSortDesc }}" style="cursor:pointer;border-bottom:1px solid rgba(255,236,209,0.3);padding-bottom:3px" style-hover="border-color:#ffecd1">Mayor precio</span>
@@ -393,23 +454,23 @@
     <section style="padding:clamp(26px,3vw,44px) clamp(20px,5vw,64px) clamp(56px,7vw,100px)">
       <div style="max-width:1500px;margin:0 auto">
         <div class="shop-layout" style="display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr);gap:clamp(24px,3vw,52px)">
-          <aside class="shop-filters" style="display:flex;flex-direction:column;gap:26px;align-self:start;position:sticky;top:92px;background:#2B0008;color:#ffecd1;padding:clamp(20px,1.6vw,28px)">
+          <aside class="shop-filters" style="display:flex;flex-direction:column;gap:26px;align-self:start;position:sticky;top:92px;background:#4A0011;color:#ffecd1;padding:clamp(20px,1.6vw,28px)">
             <div class="fgroup">
               <div class="fhead" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,236,209,0.22);padding-bottom:12px;margin-bottom:10px">
                 <span style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:500;opacity:0.85">Filtros</span>
                 <span onClick="{{ clearFilters }}" style="cursor:pointer;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;opacity:0.85" style-hover="opacity:1">Limpiar</span>
               </div>
-              <div class="flabel" style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;opacity:0.75;padding:10px 0 4px">Categoría</div>
+              <div class="flabel" style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;opacity:0.9;padding:10px 0 4px">Categoría</div>
               <sc-for list="{{ categories }}" as="c" hint-placeholder-count="5">
                 <div onClick="{{ c.pick }}" class="fchip" style="cursor:pointer;display:flex;align-items:baseline;gap:9px;padding:8px 0;font-size:13.5px;letter-spacing:0.04em">
                   <span style="width:8px;height:8px;border:1px solid #ffecd1;background:{{ c.fill }};transform:rotate(45deg);flex:0 0 auto"></span>
                   <span style="font-weight:{{ c.weight }}">{{ c.label }}</span>
-                  <span style="margin-left:auto;font-size:11px;opacity:0.7">{{ c.n }}</span>
+                  <span style="margin-left:auto;font-size:11.5px;opacity:0.9">{{ c.n }}</span>
                 </div>
               </sc-for>
             </div>
             <div class="fgroup">
-              <div class="flabel" style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;opacity:0.75;padding:0 0 4px;border-top:1px solid rgba(255,236,209,0.18);padding-top:18px">Precio</div>
+              <div class="flabel" style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;opacity:0.9;padding:0 0 4px;border-top:1px solid rgba(255,236,209,0.28);padding-top:18px">Precio</div>
               <sc-for list="{{ priceBands }}" as="b" hint-placeholder-count="4">
                 <div onClick="{{ b.pick }}" class="fchip" style="cursor:pointer;display:flex;align-items:baseline;gap:9px;padding:8px 0;font-size:13.5px;letter-spacing:0.04em">
                   <span style="width:8px;height:8px;border:1px solid #ffecd1;background:{{ b.fill }};transform:rotate(45deg);flex:0 0 auto"></span>
@@ -417,7 +478,7 @@
                 </div>
               </sc-for>
             </div>
-            <div class="fnote" style="border-top:1px solid rgba(255,236,209,0.18);padding-top:16px;font-size:11.5px;line-height:1.7;opacity:0.7">Todas las piezas se hacen en series de 40. Asesoría de talle sin cargo por WhatsApp.</div>
+            <div class="fnote" style="border-top:1px solid rgba(255,236,209,0.28);padding-top:16px;font-size:12px;line-height:1.7;opacity:0.9">Todas las piezas se hacen en series de 40. Asesoría de talle sin cargo por WhatsApp.</div>
           </aside>
 
           <div class="shop-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:clamp(24px,3vw,42px) clamp(14px,2vw,24px);align-content:start">
@@ -433,9 +494,9 @@
                 </div>
                 <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">
                   <span style="font-family:Jost,sans-serif;font-weight:300;font-size:15px;letter-spacing:0.06em;text-transform:uppercase">{{ it.name }}</span>
-                  <span style="font-size:12px;opacity:0.7;white-space:nowrap">{{ it.price }}</span>
+                  <span style="font-size:12.5px;opacity:0.92;white-space:nowrap">{{ it.price }}</span>
                 </div>
-                <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.62">{{ it.detail }}</div>
+                <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.85">{{ it.detail }}</div>
               </article>
             </sc-for>
           </div>
@@ -559,12 +620,12 @@
   </section>
 
   <section style="background-image:linear-gradient(rgba(255,236,209,0.55),rgba(255,236,209,0.55)),url('uploads/Imagen de ChatGPT 29 sept 2026, 14_02_40.png');background-size:cover;background-position:center;color:#3e000c;padding:clamp(56px,7vw,110px) clamp(20px,5vw,64px);text-align:center">
-    <span style="display:block;font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;opacity:0.5">Nuestra idea de lujo</span>
+    <span style="display:block;font-size:11px;letter-spacing:0.34em;text-transform:uppercase;font-weight:500;color:#3e000c;opacity:0.95">Nuestra idea de lujo</span>
     <p style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-weight:600;font-size:clamp(34px,5vw,64px);line-height:1.3;margin:22px auto 30px;max-width:20ch;letter-spacing:0.01em;text-wrap:balance">«Que nadie más lo vea y que igual te cambie el día.»</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:14px">
-      <span style="width:44px;height:1px;background:rgba(62,0,12,0.3)"></span>
-      <span style="font-size:10.5px;letter-spacing:0.28em;text-transform:uppercase;opacity:0.6">Blossom, 2026</span>
-      <span style="width:44px;height:1px;background:rgba(62,0,12,0.3)"></span>
+      <span style="width:44px;height:1px;background:rgba(62,0,12,0.55)"></span>
+      <span style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;font-weight:500;color:#3e000c;opacity:0.95">Blossom, 2026</span>
+      <span style="width:44px;height:1px;background:rgba(62,0,12,0.55)"></span>
     </div>
   </section>
 
@@ -605,6 +666,49 @@
 
   </sc-if>
 
+  <sc-if value="{{ isInfo }}" hint-placeholder-val="{{ false }}">
+    <div style="padding:clamp(30px,4vw,54px) clamp(20px,5vw,64px) 0;display:flex;align-items:baseline;gap:12px;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase">
+      <a href="#top" onClick="{{ goHome }}" style="opacity:0.7">Blossom</a>
+      <span style="opacity:0.4">/</span>
+      <span style="opacity:0.95">{{ info.kicker }}</span>
+    </div>
+    <section style="padding:clamp(26px,3vw,44px) clamp(20px,5vw,64px) clamp(56px,7vw,100px)">
+      <div style="max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(26px,3vw,40px)">
+        <div style="border-bottom:1px solid rgba(255,236,209,0.25);padding-bottom:clamp(20px,2.4vw,30px)">
+          <h1 style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(32px,4.6vw,60px);margin:0;letter-spacing:0.02em;text-transform:uppercase;line-height:1.04">{{ info.title }}</h1>
+          <p style="margin:18px 0 0;font-size:16px;line-height:1.8;opacity:0.85;max-width:60ch;text-wrap:pretty">{{ info.intro }}</p>
+        </div>
+
+        <sc-if value="{{ info.hasTable }}" hint-placeholder-val="{{ true }}">
+          <div class="info-table">
+            <div class="info-table-inner">
+              <div class="it-row it-head">
+                <span>{{ info.hA }}</span><span>{{ info.hB }}</span><span>{{ info.hC }}</span><span>{{ info.hD }}</span>
+              </div>
+              <sc-for list="{{ info.rows }}" as="r" hint-placeholder-count="4">
+                <div class="it-row">
+                  <span>{{ r.a }}</span><span>{{ r.b }}</span><span>{{ r.c }}</span><span>{{ r.d }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ info.sections }}" as="sec" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <h2 style="font-family:Jost,sans-serif;font-weight:300;font-size:clamp(17px,1.8vw,22px);margin:0;letter-spacing:0.1em;text-transform:uppercase">{{ sec.h }}</h2>
+            <p style="margin:0;font-size:15px;line-height:1.85;opacity:0.82;max-width:66ch;text-wrap:pretty">{{ sec.p }}</p>
+          </div>
+        </sc-for>
+
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;border-top:1px solid rgba(255,236,209,0.25);padding-top:clamp(22px,2.6vw,32px)">
+          <a href="{{ waLink }}" target="_blank" rel="noopener" style="background:#ffecd1;color:#3e000c;padding:16px 32px;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase" style-hover="background:#ffffff">Escribinos por WhatsApp</a>
+          <a href="#coleccion" onClick="{{ goCatalogo }}" style="border:1px solid rgba(255,236,209,0.4);padding:16px 30px;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase" style-hover="border-color:#ffecd1">Ver la colección</a>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
   <footer id="site-footer" style="background:#ffecd1;color:#3e000c;border-top:1px solid rgba(62,0,12,0.16);padding:clamp(44px,5vw,76px) clamp(20px,5vw,64px) 0">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:40px 30px;padding-bottom:50px">
       <div style="display:flex;flex-direction:column;gap:14px">
@@ -614,28 +718,28 @@
         <p style="margin:0;font-size:13.5px;line-height:1.7;font-weight:500;opacity:0.82;max-width:26ch">Lencería fina en series cortas. Asunción, Paraguay.</p>
         <div style="display:flex;gap:16px;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;margin-top:4px">
           <a href="https://instagram.com" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">Instagram</a>
-          <a href="https://wa.me/595" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">WhatsApp</a>
+          <a href="{{ waLink }}" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">WhatsApp</a>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:11px">
         <div style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;opacity:0.8;margin-bottom:6px">Tienda</div>
         <a href="#coleccion" onClick="{{ goCatalogo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Colección</a>
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Corsetería</a>
+        <a href="#coleccion" onClick="{{ goCorseteria }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Corsetería</a>
         <a href="#lookbook" onClick="{{ goLookbook }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Lookbook</a>
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Tarjeta de regalo</a>
+        <a href="#tarjeta-de-regalo" onClick="{{ goRegalo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Tarjeta de regalo</a>
       </div>
       <div style="display:flex;flex-direction:column;gap:11px">
         <div style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;opacity:0.8;margin-bottom:6px">Ayuda</div>
-        <a href="#atelier" onClick="{{ goAtelier }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Guía de talles</a>
-        <a href="#atelier" onClick="{{ goAtelier }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Envíos y entregas</a>
-        <a href="#atelier" onClick="{{ goAtelier }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Cambios y devoluciones</a>
-        <a href="#atelier" onClick="{{ goAtelier }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Cuidado de prendas</a>
+        <a href="#guia-de-talles" onClick="{{ goTalles }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Guía de talles</a>
+        <a href="#envios" onClick="{{ goEnvios }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Envíos y entregas</a>
+        <a href="#cambios" onClick="{{ goCambios }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Cambios y devoluciones</a>
+        <a href="#cuidado" onClick="{{ goCuidado }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Cuidado de prendas</a>
       </div>
       <div style="display:flex;flex-direction:column;gap:11px">
         <div style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;opacity:0.8;margin-bottom:6px">Legales</div>
-        <a href="#privacidad" onClick="{{ openPolicy }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Políticas de privacidad</a>
-        <a href="#privacidad" onClick="{{ openPolicy }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Términos y condiciones</a>
-        <a href="#privacidad" onClick="{{ openPolicy }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Política de cookies</a>
+        <a href="#privacidad" onClick="{{ goPrivacidad }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Políticas de privacidad</a>
+        <a href="#terminos" onClick="{{ goTerminos }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Términos y condiciones</a>
+        <a href="#cookies" onClick="{{ goCookies }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Política de cookies</a>
       </div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid rgba(62,0,12,0.16);padding:24px 0 28px;font-size:11.5px;letter-spacing:0.1em">
@@ -643,22 +747,6 @@
       <span style="font-weight:500;opacity:0.9">Desarrollado por <a href="https://neura.com.py" target="_blank" rel="noopener" style="color:#3e000c;border-bottom:1px solid rgba(62,0,12,0.5);padding-bottom:2px">Neura</a></span>
     </div>
   </footer>
-
-  <sc-if value="{{ policyOpen }}" hint-placeholder-val="{{ false }}">
-    <div onClick="{{ closePolicy }}" style="position:fixed;inset:0;background:rgba(20,0,5,0.74);display:flex;align-items:center;justify-content:center;padding:24px;z-index:95">
-      <div onClick="{{ stop }}" style="background:#ffecd1;color:#3e000c;max-width:620px;width:100%;max-height:82vh;overflow-y:auto;padding:clamp(28px,4vw,52px)">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px">
-          <h3 style="font-family:Jost,sans-serif;font-weight:200;font-size:23px;letter-spacing:0.08em;text-transform:uppercase;letter-spacing:0.04em;text-transform:uppercase;margin:0 0 6px">Políticas de privacidad</h3>
-          <span onClick="{{ closePolicy }}" style="cursor:pointer;font-size:22px;line-height:1;opacity:0.5">×</span>
-        </div>
-        <p style="font-size:10.5px;letter-spacing:0.22em;text-transform:uppercase;opacity:0.5;margin:0 0 26px">Actualizado en septiembre de 2026</p>
-        <p style="font-size:15px;line-height:1.8;margin:0 0 18px">Recolectamos únicamente los datos necesarios para procesar tu pedido: nombre, dirección de entrega, correo electrónico y teléfono. No almacenamos datos de tarjetas: el pago se procesa de forma cifrada por nuestra pasarela.</p>
-        <p style="font-size:15px;line-height:1.8;margin:0 0 18px">Tus envíos llegan en empaque neutro, sin referencias visibles al contenido ni a la marca. No compartimos ni vendemos tu información a terceros, salvo la empresa de logística que realiza la entrega.</p>
-        <p style="font-size:15px;line-height:1.8;margin:0 0 18px">Podés solicitar la corrección o eliminación de tus datos, y darte de baja de nuestras cartas, escribiendo a hola@blossom.com.py. Respondemos en un plazo máximo de 72 horas.</p>
-        <p style="font-size:15px;line-height:1.8;margin:0">Usamos cookies propias para recordar tu bolsa de compras y medir el tráfico del sitio de forma agregada.</p>
-      </div>
-    </div>
-  </sc-if>
 
   <sc-if value="{{ bagOpen }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ toggleBag }}" style="position:fixed;inset:0;background:rgba(20,0,5,0.6);z-index:95;display:flex;justify-content:flex-end">
@@ -670,14 +758,38 @@
         <sc-if value="{{ bagEmpty }}" hint-placeholder-val="{{ true }}">
           <p style="font-family:Jost,sans-serif;font-weight:200;font-size:21px;opacity:0.6;margin:0">Todavía no elegiste nada.</p>
         </sc-if>
-        <sc-for list="{{ bag }}" as="line" hint-placeholder-count="0">
-          <div style="display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(255,236,209,0.14);padding-bottom:13px">
-            <span style="font-family:Jost,sans-serif;font-weight:200;font-size:18px">{{ line.name }}</span>
-            <span style="font-size:12.5px;opacity:0.6">× {{ line.qty }}</span>
-          </div>
-        </sc-for>
+
+        <div style="flex:1 1 auto;overflow-y:auto;display:flex;flex-direction:column;gap:16px;margin:0 -4px;padding:0 4px">
+          <sc-for list="{{ bag }}" as="line" hint-placeholder-count="0">
+            <div style="display:flex;gap:14px;border-bottom:1px solid rgba(255,236,209,0.14);padding-bottom:16px">
+              <span style="flex:0 0 auto;width:66px;height:82px;overflow:hidden;background:rgba(255,236,209,0.08)">
+                <img src="{{ line.src }}" alt="" style="width:100%;height:100%;object-fit:cover;display:block" />
+              </span>
+              <span style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:9px">
+                <span style="font-family:Jost,sans-serif;font-weight:200;font-size:17px;line-height:1.2">{{ line.name }}</span>
+                <span style="font-size:13px;opacity:0.75">{{ line.line }}</span>
+                <span style="display:flex;align-items:center;gap:0;margin-top:2px">
+                  <span onClick="{{ line.less }}" aria-label="Quitar uno" style="cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,236,209,0.3);font-size:15px;line-height:1" style-hover="border-color:#ffecd1">−</span>
+                  <span style="min-width:36px;text-align:center;font-size:13px">{{ line.qty }}</span>
+                  <span onClick="{{ line.more }}" aria-label="Agregar uno" style="cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,236,209,0.3);font-size:15px;line-height:1" style-hover="border-color:#ffecd1">+</span>
+                </span>
+              </span>
+            </div>
+          </sc-for>
+        </div>
+
         <sc-if value="{{ hasBag }}" hint-placeholder-val="{{ false }}">
-          <button onClick="{{ checkout }}" style="margin-top:auto;background:#ffecd1;color:#3e000c;border:none;font-family:Jost,sans-serif;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;padding:16px;cursor:pointer">Finalizar compra</button>
+          <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:14px;border-top:1px solid rgba(255,236,209,0.25);padding-top:16px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.7">Total</span>
+              <span style="font-family:Jost,sans-serif;font-weight:300;font-size:21px">{{ bagTotal }}</span>
+            </div>
+            <button onClick="{{ checkout }}" style="background:#25D366;color:#ffffff;border:none;font-family:Jost,sans-serif;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;padding:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px" style-hover="background:#1fb857">
+              <svg viewBox="0 0 32 32" width="17" height="17" fill="#ffffff" aria-hidden="true"><path d="M16.004 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.257.59 4.46 1.71 6.402L3.2 28.8l6.57-1.723a12.74 12.74 0 0 0 6.234 1.588h.005c7.06 0 12.8-5.74 12.8-12.8s-5.74-12.665-12.805-12.665zm0 23.03h-.004a10.6 10.6 0 0 1-5.4-1.48l-.387-.23-4.01 1.05 1.07-3.91-.252-.4a10.56 10.56 0 0 1-1.62-5.63c0-5.86 4.77-10.63 10.64-10.63 2.84 0 5.51 1.11 7.52 3.12a10.56 10.56 0 0 1 3.11 7.52c0 5.86-4.77 10.62-10.63 10.62z"/></svg>
+              Finalizar por WhatsApp
+            </button>
+            <span style="font-size:11px;line-height:1.6;opacity:0.6;text-align:center">Te abrimos el chat con el pedido ya escrito. Confirmamos talle, envío y pago por ahí.</span>
+          </div>
         </sc-if>
       </aside>
     </div>
@@ -687,7 +799,7 @@
     <div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#ffecd1;color:#3e000c;padding:13px 26px;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;z-index:100">{{ toast }}</div>
   </sc-if>
 
-  <a id="wa-bubble" href="https://wa.me/595971000000" target="_blank" rel="noopener" aria-label="WhatsApp" style="position:fixed;right:22px;bottom:22px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(20,0,5,0.4);transition:transform .3s ease,opacity .3s ease" style-hover="transform:scale(1.08)">
+  <a id="wa-bubble" href="{{ waLink }}" target="_blank" rel="noopener" aria-label="WhatsApp" style="position:fixed;right:22px;bottom:22px;z-index:90;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(20,0,5,0.4);transition:transform .3s ease,opacity .3s ease" style-hover="transform:scale(1.08)">
     <svg viewBox="0 0 32 32" width="30" height="30" fill="#ffffff" aria-hidden="true"><path d="M16.004 3.2c-7.06 0-12.8 5.74-12.8 12.8 0 2.257.59 4.46 1.71 6.402L3.2 28.8l6.57-1.723a12.74 12.74 0 0 0 6.234 1.588h.005c7.06 0 12.8-5.74 12.8-12.8s-5.74-12.665-12.805-12.665zm0 23.03h-.004a10.6 10.6 0 0 1-5.4-1.48l-.387-.23-4.01 1.05 1.07-3.91-.252-.4a10.56 10.56 0 0 1-1.62-5.63c0-5.86 4.77-10.63 10.64-10.63 2.84 0 5.51 1.11 7.52 3.12a10.56 10.56 0 0 1 3.11 7.52c0 5.86-4.77 10.62-10.63 10.62zm5.83-7.96c-.32-.16-1.89-.93-2.18-1.04-.29-.11-.5-.16-.71.16-.21.32-.82 1.04-1 1.25-.18.21-.37.24-.69.08-.32-.16-1.35-.5-2.57-1.58-.95-.85-1.59-1.9-1.78-2.22-.18-.32-.02-.49.14-.65.15-.15.32-.37.48-.56.16-.19.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.71-1.71-.97-2.34-.26-.62-.52-.54-.71-.55l-.6-.01c-.21 0-.55.08-.84.4-.29.32-1.1 1.08-1.1 2.63s1.13 3.05 1.29 3.26c.16.21 2.22 3.39 5.38 4.75.75.32 1.34.51 1.8.66.76.24 1.45.21 1.99.13.61-.09 1.89-.77 2.16-1.52.27-.75.27-1.39.19-1.52-.08-.13-.29-.21-.61-.37z"/></svg>
   </a>
 
@@ -695,7 +807,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { bag: [], bagOpen: false, policyOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M" };
+  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "90" };
 
   componentDidMount() {
     requestAnimationFrame(() => this.reveal());
@@ -822,6 +934,16 @@ class Component extends DCLogic {
 
   money(n) {
     return 'Gs. ' + n.toLocaleString('es-PY');
+  }
+
+  // Numero provisorio. Cambiar aca y queda actualizado en la burbuja,
+  // en el pie y en el boton de finalizar compra.
+  waNumber() {
+    return '595971000000';
+  }
+
+  waLink(text) {
+    return 'https://wa.me/' + this.waNumber() + (text ? '?text=' + encodeURIComponent(text) : '');
   }
 
   px(id, w) {
@@ -963,6 +1085,211 @@ class Component extends DCLogic {
     };
   }
 
+  // CONTENIDO DE EJEMPLO. Las medidas, los plazos, los costos y los textos
+  // legales son provisorios: hay que reemplazarlos por los datos reales.
+  infoPages() {
+    return {
+      talles: {
+        kicker: "Ayuda",
+        title: "Guía de talles",
+        intro: "Nuestros talles siguen el contorno de bajo busto en centímetros, de 85 a 110. Si estás entre dos, llevá el mayor: el encaje cede con el uso.",
+        table: {
+          head: ["Talle", "Bajo busto", "Busto", "Cadera"],
+          rows: [
+            { a: "85", b: "68 – 72 cm", c: "83 – 87 cm", d: "90 – 94 cm" },
+            { a: "90", b: "73 – 77 cm", c: "88 – 92 cm", d: "95 – 99 cm" },
+            { a: "95", b: "78 – 82 cm", c: "93 – 97 cm", d: "100 – 104 cm" },
+            { a: "100", b: "83 – 87 cm", c: "98 – 102 cm", d: "105 – 109 cm" },
+            { a: "105", b: "88 – 92 cm", c: "103 – 107 cm", d: "110 – 114 cm" },
+            { a: "110", b: "93 – 97 cm", c: "108 – 112 cm", d: "115 – 119 cm" }
+          ]
+        },
+        sections: [
+          { h: "Cómo tomar las medidas", p: "Medite sin ropa encima y con la cinta paralela al piso, apoyada pero sin apretar. El bajo busto se mide justo debajo del pecho; el busto, en la parte más ancha; la cadera, en el punto más amplio." },
+          { h: "Si estás entre dos talles", p: "Elegí el mayor. Las piezas de encaje y tul ceden levemente con el uso, y los corsés de serie corta sientan mejor holgados que al límite." },
+          { h: "Asesoría sin cargo", p: "Si tenés dudas, escribinos por WhatsApp con tus medidas y te decimos qué talle pedir antes de comprar." }
+        ]
+      },
+      envios: {
+        kicker: "Ayuda",
+        title: "Envíos y entregas",
+        intro: "Preparamos cada pedido en 72 horas hábiles y enviamos a todo el Paraguay en empaque neutro, sin referencias visibles al contenido ni a la marca.",
+        table: {
+          head: ["Destino", "Plazo estimado", "Costo", "Seguimiento"],
+          rows: [
+            { a: "Asunción y Gran Asunción", b: "24 – 48 h", c: "Gs. 25.000", d: "Sí" },
+            { a: "Interior del país", b: "3 – 5 días hábiles", c: "Gs. 45.000", d: "Sí" },
+            { a: "Retiro en el atelier", b: "A coordinar", c: "Sin cargo", d: "—" },
+            { a: "Compras sobre Gs. 600.000", b: "Según destino", c: "Sin cargo", d: "Sí" }
+          ]
+        },
+        sections: [
+          { h: "Preparación", p: "Al ser series de cuarenta piezas hechas a mano, el pedido se arma una vez confirmado el pago. Ese plazo de 72 horas es previo al despacho." },
+          { h: "Empaque discreto", p: "El paquete sale en caja neutra, sin logos ni descripción del contenido en la etiqueta. Solo figuran los datos del destinatario." },
+          { h: "Seguimiento", p: "Te enviamos el número de guía por WhatsApp apenas se despacha el pedido." }
+        ]
+      },
+      cambios: {
+        kicker: "Ayuda",
+        title: "Cambios y devoluciones",
+        intro: "Aceptamos cambios dentro de los 15 días de recibido el pedido, siempre que la pieza esté sin uso, con su etiqueta y en su empaque original.",
+        sections: [
+          { h: "Qué se puede cambiar", p: "Corsetería, conjuntos, batas y piezas para dormir, por talle o por otro modelo del mismo valor. Si el modelo elegido vale más, se abona la diferencia." },
+          { h: "Qué no se puede cambiar", p: "Por razones de higiene no aceptamos cambios de bombachas, ni de piezas que hayan sido usadas, lavadas o que no conserven su etiqueta original." },
+          { h: "Cómo iniciarlo", p: "Escribinos por WhatsApp dentro de los 15 días con tu número de pedido. Coordinamos el retiro o el envío según dónde estés." },
+          { h: "Piezas con falla", p: "Si la pieza llegó con una falla de confección, la reponemos sin cargo y nos hacemos cargo del envío en ambos sentidos." }
+        ]
+      },
+      cuidado: {
+        kicker: "Ayuda",
+        title: "Cuidado de prendas",
+        intro: "El encaje de Calais y la seda lavada duran años si se tratan con cuidado. Estas son las pautas que recomendamos para cada material.",
+        table: {
+          head: ["Material", "Lavado", "Secado", "Planchado"],
+          rows: [
+            { a: "Encaje de Calais", b: "A mano, agua fría", c: "A la sombra, en plano", d: "No planchar" },
+            { a: "Seda lavada", b: "A mano, jabón neutro", c: "A la sombra, en plano", d: "Vapor, del revés" },
+            { a: "Satén de seda", b: "A mano, agua fría", c: "A la sombra, colgado", d: "Vapor, del revés" },
+            { a: "Tul bordado", b: "A mano, sin frotar", c: "A la sombra, en plano", d: "No planchar" }
+          ]
+        },
+        sections: [
+          { h: "Nunca retorcer", p: "Para quitar el agua, presioná la pieza entre dos toallas. Retorcer deforma la copa y quiebra el hilo del encaje." },
+          { h: "Sin secadora ni lavandina", p: "El calor de la secadora y los blanqueadores con cloro cortan las fibras y amarillean la seda de forma irreversible." },
+          { h: "Cómo guardarlas", p: "Guardá los corsés y sujetadores sin doblar la copa hacia adentro, uno al lado del otro. Las batas y los camisones, colgados o doblados en plano." }
+        ]
+      },
+      regalo: {
+        kicker: "Tienda",
+        title: "Tarjeta de regalo",
+        intro: "Una tarjeta digital por el monto que elijas, sin vencimiento y válida para toda la colección. Llega por correo o por WhatsApp, lista para reenviar.",
+        table: {
+          head: ["Monto", "Alcanza para", "Formato", "Vigencia"],
+          rows: [
+            { a: "Gs. 300.000", b: "Una pieza de lencería", c: "Digital", d: "Sin vencimiento" },
+            { a: "Gs. 500.000", b: "Un conjunto", c: "Digital", d: "Sin vencimiento" },
+            { a: "Gs. 800.000", b: "Un corsé o una bata", c: "Digital", d: "Sin vencimiento" },
+            { a: "Monto libre", b: "A definir", c: "Digital", d: "Sin vencimiento" }
+          ]
+        },
+        sections: [
+          { h: "Cómo se compra", p: "Escribinos por WhatsApp con el monto y el nombre de quien la recibe. Te pasamos los datos para el pago y emitimos la tarjeta el mismo día." },
+          { h: "Cómo se usa", p: "La tarjeta trae un código que se aplica al confirmar el pedido. Se puede usar en varias compras hasta agotar el saldo." },
+          { h: "Empaque", p: "Si preferís entregarla en mano, la imprimimos en papel de algodón dentro de un sobre neutro, sin cargo adicional." }
+        ]
+      },
+      privacidad: {
+        kicker: "Legales",
+        title: "Políticas de privacidad",
+        intro: "Actualizado en septiembre de 2026. Esta política explica qué datos tuyos guardamos, para qué los usamos y cómo pedir que los borremos.",
+        sections: [
+          { h: "Qué datos recolectamos", p: "Únicamente los necesarios para procesar tu pedido: nombre, dirección de entrega, correo electrónico y teléfono. No almacenamos datos de tarjetas: el pago se procesa de forma cifrada por la pasarela." },
+          { h: "Con quién los compartimos", p: "Solo con la empresa de logística que realiza la entrega, y apenas los datos que necesita para llegar a tu domicilio. No vendemos ni cedemos tu información a terceros con fines publicitarios." },
+          { h: "Cuánto tiempo los guardamos", p: "Conservamos los datos del pedido mientras dure el plazo de cambio y por el período que exige la normativa contable. Después se eliminan." },
+          { h: "Tus derechos", p: "Podés pedir acceso, corrección o eliminación de tus datos, y darte de baja de nuestras cartas, escribiendo a hola@blossom.com.py. Respondemos en un plazo máximo de 72 horas." }
+        ]
+      },
+      terminos: {
+        kicker: "Legales",
+        title: "Términos y condiciones",
+        intro: "Actualizado en septiembre de 2026. Al comprar en Blossom aceptás las condiciones que siguen. Son las reglas de la venta; el tratamiento de tus datos se explica en la política de privacidad.",
+        sections: [
+          { h: "Precios y disponibilidad", p: "Los precios están expresados en guaraníes e incluyen impuestos. Trabajamos en series de cuarenta piezas por modelo: si una pieza se agota entre tu pedido y la confirmación, te avisamos y devolvemos el importe completo." },
+          { h: "Pedidos y pagos", p: "El pedido queda confirmado una vez acreditado el pago. Nos reservamos el derecho de cancelar pedidos con datos incompletos o cuando no podamos verificar la operación." },
+          { h: "Plazos", p: "La preparación demora 72 horas hábiles y no incluye el tiempo de transporte. Los plazos de entrega son estimados y dependen de la empresa de logística." },
+          { h: "Cambios", p: "Las condiciones de cambio y devolución se detallan en su propia página y forman parte de estos términos." },
+          { h: "Propiedad intelectual", p: "Las fotografías, los textos y los moldes de este sitio son de Blossom. No pueden reproducirse con fines comerciales sin autorización escrita." },
+          { h: "Ley aplicable", p: "Estas condiciones se rigen por las leyes de la República del Paraguay y cualquier controversia se somete a los tribunales de Asunción." }
+        ]
+      },
+      cookies: {
+        kicker: "Legales",
+        title: "Política de cookies",
+        intro: "Actualizado en septiembre de 2026. Usamos la menor cantidad de cookies posible: las que hacen falta para que la tienda funcione y una medición agregada de tráfico.",
+        table: {
+          head: ["Tipo", "Para qué sirve", "Duración", "¿Se puede desactivar?"],
+          rows: [
+            { a: "Técnica", b: "Recordar tu bolsa de compras", c: "Sesión", d: "No" },
+            { a: "Técnica", b: "Mantener tus filtros del catálogo", c: "30 días", d: "No" },
+            { a: "Analítica", b: "Medir el tráfico de forma agregada", c: "12 meses", d: "Sí" },
+            { a: "Publicitaria", b: "No utilizamos", c: "—", d: "—" }
+          ]
+        },
+        sections: [
+          { h: "Cookies propias", p: "Son las que necesita la tienda para funcionar: recordar qué pusiste en la bolsa y qué filtros elegiste. Sin ellas no se puede completar una compra." },
+          { h: "Medición", p: "Contamos visitas y páginas vistas de forma agregada, sin construir perfiles individuales ni cruzar esa información con tus datos de compra." },
+          { h: "Cómo desactivarlas", p: "Podés bloquear o borrar las cookies desde la configuración de tu navegador. Si bloqueás las técnicas, la bolsa de compras dejará de funcionar." }
+        ]
+      }
+    };
+  }
+
+  infoVals() {
+    const vacio = { kicker: "", title: "", intro: "", sections: [], rows: [], hasTable: false,
+                    hA: "", hB: "", hC: "", hD: "" };
+    if (this.state.view !== "info") return { info: vacio };
+    const pg = this.infoPages()[this.state.infoKey];
+    if (!pg) return { info: vacio };
+    const head = pg.table ? pg.table.head : ["", "", "", ""];
+    return {
+      info: {
+        kicker: pg.kicker,
+        title: pg.title,
+        intro: pg.intro,
+        sections: pg.sections || [],
+        hasTable: !!pg.table,
+        hA: head[0], hB: head[1], hC: head[2], hD: head[3],
+        rows: pg.table ? pg.table.rows : []
+      }
+    };
+  }
+
+  searchVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    const hits = q.length < 2 ? [] : this.catalog().filter(function (it) {
+      return (it.name + " " + it.cat + " " + it.detail).toLowerCase().indexOf(q) >= 0;
+    });
+    return {
+      searchOpen: this.state.searchOpen,
+      searchHasQuery: q.length >= 2,
+      searchHasHits: hits.length > 0,
+      searchEmpty: q.length >= 2 && hits.length === 0,
+      searchCount: hits.length === 1 ? "1 pieza" : hits.length + " piezas",
+      searchHits: hits.map((it) => ({
+        slot: "sr-" + it.slot,
+        name: it.name,
+        cat: it.cat,
+        price: this.money(it.p),
+        src: it.src,
+        open: (e) => {
+          if (e && e.preventDefault) e.preventDefault();
+          this.setState({ searchOpen: false, q: "", view: "producto", product: it.slot, gIndex: 0 });
+        }
+      })),
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      toggleSearch: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        this.setState((s) => ({ searchOpen: !s.searchOpen, q: "", menuOpen: false, bagOpen: false }));
+        setTimeout(() => { const i = document.getElementById("buscador"); if (i) i.focus(); }, 60);
+      },
+      closeSearch: () => this.setState({ searchOpen: false, q: "" })
+    };
+  }
+
+  openInfo(key) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      this.setState({ view: "info", infoKey: key, menuOpen: false, bagOpen: false, searchOpen: false });
+    };
+  }
+
+  goCat(label) {
+    return (e) => {
+      if (e && e.preventDefault) e.preventDefault();
+      this.setState({ view: "catalogo", cat: label, band: "Todo", menuOpen: false, bagOpen: false, searchOpen: false });
+    };
+  }
+
   nav(view) {
     return (e) => {
       if (e && e.preventDefault) e.preventDefault();
@@ -980,13 +1307,25 @@ class Component extends DCLogic {
   }
 
   addLine(name) {
+    const it = this.catalog().find((x) => x.name === name);
     this.setState((s) => {
       const next = s.bag.map((l) => ({ ...l }));
       const hit = next.find((l) => l.name === name);
-      if (hit) hit.qty += 1; else next.push({ name, qty: 1 });
+      if (hit) hit.qty += 1;
+      else next.push({ name, qty: 1, src: it ? it.src : "", slot: it ? it.slot : "", p: it ? it.p : 0 });
       return { bag: next };
     });
     this.flash("Agregado a la bolsa");
+  }
+
+  changeQty(name, delta) {
+    this.setState((s) => {
+      const next = s.bag.map((l) => ({ ...l }));
+      const hit = next.find((l) => l.name === name);
+      if (!hit) return {};
+      hit.qty += delta;
+      return { bag: next.filter((l) => l.qty > 0) };
+    });
   }
 
   flash(msg) {
@@ -999,19 +1338,29 @@ class Component extends DCLogic {
     const bag = this.state.bag;
     // el header solo es transparente en la portada, arriba de todo y con el menu cerrado
     const clearHdr = this.state.view === "home" && !this.state.scrolled && !this.state.menuOpen && !this.state.bagOpen;
+    const bagTotal = bag.reduce((n, l) => n + (l.p || 0) * l.qty, 0);
     return {
-      bag,
+      bag: bag.map((l) => ({
+        name: l.name,
+        qty: l.qty,
+        src: l.src,
+        slot: "bag-" + (l.slot || l.name),
+        line: this.money((l.p || 0) * l.qty),
+        more: () => this.changeQty(l.name, 1),
+        less: () => this.changeQty(l.name, -1)
+      })),
       bagCount: bag.reduce((n, l) => n + l.qty, 0),
       bagEmpty: bag.length === 0,
       hasBag: bag.length > 0,
       bagOpen: this.state.bagOpen,
-      policyOpen: this.state.policyOpen,
+      bagTotal: this.money(bagTotal),
       toast: this.state.toast,
       isHome: this.state.view === "home",
       isCatalogo: this.state.view === "catalogo",
       isLookbook: this.state.view === "lookbook",
       isAtelier: this.state.view === "atelier",
       isProducto: this.state.view === "producto",
+      isInfo: this.state.view === "info",
       hdrBg: clearHdr ? "transparent" : "rgba(62,0,12,0.93)",
       hdrBlur: clearHdr ? "none" : "blur(10px)",
       hdrInk: "#ffecd1",
@@ -1021,6 +1370,15 @@ class Component extends DCLogic {
       goCatalogo: this.nav("catalogo"),
       goLookbook: this.nav("lookbook"),
       goAtelier: this.nav("atelier"),
+      goCorseteria: this.goCat("Corsetería"),
+      goRegalo: this.openInfo("regalo"),
+      goTalles: this.openInfo("talles"),
+      goEnvios: this.openInfo("envios"),
+      goCambios: this.openInfo("cambios"),
+      goCuidado: this.openInfo("cuidado"),
+      goPrivacidad: this.openInfo("privacidad"),
+      goTerminos: this.openInfo("terminos"),
+      goCookies: this.openInfo("cookies"),
       menuOpen: this.state.menuOpen,
       openMenu: () => this.setState({ menuOpen: true }),
       closeMenu: () => this.setState({ menuOpen: false }),
@@ -1034,14 +1392,22 @@ class Component extends DCLogic {
         this.addLine(e.currentTarget.dataset.name);
       },
       toggleBag: () => this.setState((s) => ({ bagOpen: !s.bagOpen })),
-      openPolicy: (e) => { e.preventDefault(); this.setState({ policyOpen: true }); },
-      closePolicy: () => this.setState({ policyOpen: false }),
       subscribe: () => this.flash("Gracias, te escribimos pronto"),
-      checkout: () => this.flash("Checkout — demo"),
+      waLink: this.waLink(""),
+      checkout: () => {
+        if (!bag.length) return;
+        const lineas = bag.map((l) => "• " + l.name + " x" + l.qty + " — " + this.money((l.p || 0) * l.qty)).join("\n");
+        const msg = "¡Hola Blossom! Quiero hacer este pedido:\n\n" + lineas +
+                    "\n\nTotal: " + this.money(bagTotal) +
+                    "\n\nMi nombre:\nCiudad / dirección de entrega:\nTalle:";
+        window.open(this.waLink(msg), "_blank", "noopener");
+      },
       stop: (e) => e.stopPropagation(),
       ...this.catalogVals(),
       ...this.featuredVals(),
       ...this.productVals(),
+      ...this.infoVals(),
+      ...this.searchVals(),
     };
   }
 }
