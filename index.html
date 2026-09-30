@@ -22,6 +22,14 @@
   input::placeholder { color: rgba(255,236,209,0.45); }
   img, svg, video, image-slot { max-width: 100%; }
 
+  /* flechas del carrusel: a los costados del bloque en escritorio,
+     sobre la imagen en celular, donde la foto ya ocupa todo el ancho */
+  .feat-arrow-side { display: none; }
+  @media (min-width: 721px) {
+    .feat-arrow-side { display: flex; }
+    .feat-arrow-img  { display: none !important; }
+  }
+
   /* la portada arranca debajo del header para que se vea a traves de el */
   .hero { margin-top: calc(var(--hdr, 74px) * -1); }
 
@@ -187,12 +195,6 @@
     </div>
   </section>
 
-  <div style="display:flex;align-items:center;gap:20px;padding:clamp(40px,5vw,72px) clamp(20px,5vw,64px) 0">
-    <span style="flex:1 1 0;height:1px;background:rgba(255,236,209,0.2)"></span>
-    <span style="width:5px;height:5px;background:rgba(255,236,209,0.6);transform:rotate(45deg)"></span>
-    <span style="flex:1 1 0;height:1px;background:rgba(255,236,209,0.2)"></span>
-  </div>
-
   <section style="padding:clamp(48px,5vw,84px) clamp(20px,5vw,64px);background:#ffecd1;color:#3e000c">
     <div style="max-width:1500px;margin:0 auto">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(62,0,12,0.22);padding-bottom:16px;margin-bottom:clamp(22px,2.6vw,38px)">
@@ -294,8 +296,8 @@
                   <div style="position:absolute;inset:0;transition:transform 1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.05)">
                     <image-slot id="{{ fp.slot }}" src="{{ fp.src }}" shape="rect" fit="cover" placeholder="Pieza destacada"></image-slot>
                   </div>
-                  <span onClick="{{ featPrev }}" aria-label="Anterior" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">←</span>
-                  <span onClick="{{ featNext }}" aria-label="Siguiente" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">→</span>
+                  <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-img" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">←</span>
+                  <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-img" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#3e000c">→</span>
                 </div>
               </div>
               <div style="display:flex;flex-direction:column;gap:18px">
@@ -311,6 +313,8 @@
             </div>
           </sc-for>
         </div>
+        <span onClick="{{ featPrev }}" aria-label="Anterior" class="feat-arrow-side" style="position:absolute;top:50%;left:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#3e000c">←</span>
+        <span onClick="{{ featNext }}" aria-label="Siguiente" class="feat-arrow-side" style="position:absolute;top:50%;right:0;transform:translateY(-50%);width:48px;height:48px;align-items:center;justify-content:center;background:rgba(62,0,12,0.72);color:#ffecd1;font-size:16px;cursor:pointer;z-index:4" style-hover="background:#3e000c">→</span>
       </div>
 
       <div style="display:flex;gap:10px;justify-content:center;margin-top:clamp(24px,3vw,40px);flex-wrap:wrap">
