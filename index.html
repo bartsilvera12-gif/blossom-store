@@ -4,6 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Blossom · Lencería fina en Asunción</title>
+<meta name="description" content="Lencería fina cortada a mano en Asunción. Moldes propios, encajes de Calais y series que nunca pasan de cuarenta piezas." />
+<link rel="canonical" href="https://blossomparaguay.com/" />
+
+<!-- Vista previa al compartir el enlace (Facebook, Instagram, WhatsApp).
+     La imagen debe ser una URL absoluta: las redes la descargan desde
+     afuera y una ruta relativa no les sirve. -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Blossom" />
+<meta property="og:locale" content="es_PY" />
+<meta property="og:url" content="https://blossomparaguay.com/" />
+<meta property="og:title" content="Blossom · Lencería fina en Asunción" />
+<meta property="og:description" content="Lencería fina cortada a mano en Asunción. Moldes propios, encajes de Calais y series que nunca pasan de cuarenta piezas." />
+<meta property="og:image" content="https://blossomparaguay.com/og-image.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Blossom · lencería fina en Asunción" />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="icon" href="favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
@@ -149,6 +166,9 @@
 
     /* areas de toque comodas */
     button, .hero-cta { min-height: 48px; }
+
+    /* contacto de "Nosotros": una columna, el correo es largo */
+    .atl-contacto { grid-template-columns: minmax(0,1fr) !important; gap: 18px !important; }
 
     /* lupa en el header, ya que el texto "Buscar" se oculta */
     .hdr-search-ico { display: flex !important; }
@@ -688,6 +708,14 @@
           <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">72 h</div>
           <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-top:6px">preparación del pedido</div>
         </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px;border-top:1px solid rgba(255,236,209,0.2);padding-top:26px">
+        <span style="font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;opacity:0.6">Contacto</span>
+        <div class="atl-contacto" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px">
+          <a href="{{ waLink }}" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:6px;color:#ffecd1" style-hover="opacity:0.7"><span style="font-size:9.5px;letter-spacing:0.26em;text-transform:uppercase;opacity:0.6">WhatsApp</span><span style="font-size:15px;letter-spacing:0.03em;border-bottom:1px solid rgba(255,236,209,0.32);padding-bottom:5px;word-break:break-word">0994 244 449</span></a><a href="https://www.instagram.com/blossom.paraguay" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:6px;color:#ffecd1" style-hover="opacity:0.7"><span style="font-size:9.5px;letter-spacing:0.26em;text-transform:uppercase;opacity:0.6">Instagram</span><span style="font-size:15px;letter-spacing:0.03em;border-bottom:1px solid rgba(255,236,209,0.32);padding-bottom:5px;word-break:break-word">@blossom.paraguay</span></a><a href="https://www.facebook.com/blossom.paraguay" target="_blank" rel="noopener" style="display:flex;flex-direction:column;gap:6px;color:#ffecd1" style-hover="opacity:0.7"><span style="font-size:9.5px;letter-spacing:0.26em;text-transform:uppercase;opacity:0.6">Facebook</span><span style="font-size:15px;letter-spacing:0.03em;border-bottom:1px solid rgba(255,236,209,0.32);padding-bottom:5px;word-break:break-word">Blossom Paraguay</span></a><a href="mailto:blossomintimatespy@gmail.com" style="display:flex;flex-direction:column;gap:6px;color:#ffecd1" style-hover="opacity:0.7"><span style="font-size:9.5px;letter-spacing:0.26em;text-transform:uppercase;opacity:0.6">Correo</span><span style="font-size:15px;letter-spacing:0.03em;border-bottom:1px solid rgba(255,236,209,0.32);padding-bottom:5px;word-break:break-word">blossomintimatespy@gmail.com</span></a>
+        </div>
+        <p style="margin:0;font-size:13px;line-height:1.7;opacity:0.6">Atendemos por WhatsApp de lunes a sábado. Asesoría de talle sin cargo antes de comprar.</p>
       </div>
     </div>
   </section>
