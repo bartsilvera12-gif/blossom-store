@@ -745,8 +745,9 @@
         </div>
         <p style="margin:0;font-size:13.5px;line-height:1.7;font-weight:500;opacity:0.82;max-width:26ch">Lencería fina en series cortas. Asunción, Paraguay.</p>
         <div style="display:flex;gap:16px;font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;margin-top:4px">
-          <a href="https://instagram.com" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">Instagram</a>
+          <a href="https://www.instagram.com/blossom.paraguay" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">Instagram</a>
           <a href="{{ waLink }}" target="_blank" rel="noopener" style="font-weight:600;opacity:1;color:#3e000c">WhatsApp</a>
+          <a href="mailto:blossomintimatespy@gmail.com" style="font-weight:600;opacity:1;color:#3e000c">Correo</a>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:11px">
@@ -967,8 +968,6 @@ class Component extends DCLogic {
     return 'Gs. ' + n.toLocaleString('es-PY');
   }
 
-  // Numero provisorio. Cambiar aca y queda actualizado en la burbuja,
-  // en el pie y en el boton de finalizar compra.
   // Paleta de la coleccion. El hexadecimal es solo la muestra que se ve
   // en la ficha; ajustar si cambian los tonos reales.
   colorHex(nombre) {
@@ -976,8 +975,11 @@ class Component extends DCLogic {
     return mapa[nombre] || "#FFECD1";
   }
 
+  // 0994 244 449 en formato internacional, sin el 0 inicial.
+  // Cambiar aca y queda actualizado en la burbuja, en el pie y en el
+  // boton de finalizar compra.
   waNumber() {
-    return '595971000000';
+    return '595994244449';
   }
 
   waLink(text) {
@@ -1238,7 +1240,7 @@ class Component extends DCLogic {
           { h: "Qué datos recolectamos", p: "Únicamente los necesarios para procesar tu pedido: nombre, dirección de entrega, correo electrónico y teléfono. No almacenamos datos de tarjetas: el pago se procesa de forma cifrada por la pasarela." },
           { h: "Con quién los compartimos", p: "Solo con la empresa de logística que realiza la entrega, y apenas los datos que necesita para llegar a tu domicilio. No vendemos ni cedemos tu información a terceros con fines publicitarios." },
           { h: "Cuánto tiempo los guardamos", p: "Conservamos los datos del pedido mientras dure el plazo de cambio y por el período que exige la normativa contable. Después se eliminan." },
-          { h: "Tus derechos", p: "Podés pedir acceso, corrección o eliminación de tus datos, y darte de baja de nuestras cartas, escribiendo a hola@blossom.com.py. Respondemos en un plazo máximo de 72 horas." }
+          { h: "Tus derechos", p: "Podés pedir acceso, corrección o eliminación de tus datos, y darte de baja de nuestras cartas, escribiendo a blossomintimatespy@gmail.com. Respondemos en un plazo máximo de 72 horas." }
         ]
       },
       terminos: {
