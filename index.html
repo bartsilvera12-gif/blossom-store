@@ -594,7 +594,7 @@
           <div style="display:flex;flex-direction:column;gap:10px">
             <span style="font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;opacity:0.6">Talle</span>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <sc-for list="{{ product.sizes }}" as="sz" hint-placeholder-count="4">
+              <sc-for list="{{ product.sizes }}" as="sz" hint-placeholder-count="6">
                 <span onClick="{{ sz.pick }}" style="cursor:pointer;min-width:46px;text-align:center;padding:11px 14px;font-size:12px;letter-spacing:0.08em;border:1px solid rgba(255,236,209,0.3);background:{{ sz.bg }};color:{{ sz.fg }}" style-hover="border-color:#ffecd1">{{ sz.label }}</span>
               </sc-for>
             </div>
@@ -608,7 +608,7 @@
           <div style="display:flex;flex-direction:column;gap:9px;font-size:12px;line-height:1.5;opacity:0.62;border-top:1px solid rgba(255,236,209,0.18);padding-top:18px">
             <span>Envío a todo el Paraguay en empaque discreto.</span>
             <span>Serie de 40 piezas · hecho a mano en Asunción.</span>
-            <span>Cambios dentro de los 15 días.</span>
+            <span>Sin cambios ni devoluciones por tratarse de prendas íntimas.</span>
           </div>
         </div>
       </div>
@@ -692,20 +692,17 @@
       <image-slot id="v2-atelier" src="https://images.pexels.com/photos/7147613/pexels-photo-7147613.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" shape="rect" fit="cover" placeholder="Taller — costura a mano"></image-slot>
     </div>
     <div style="padding:clamp(44px,6vw,92px) clamp(24px,5vw,64px);display:flex;flex-direction:column;justify-content:center;gap:26px">
-      <span style="font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;opacity:0.6">El atelier</span>
-      <h2 style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(26px,3.6vw,48px);line-height:1.1;margin:0;letter-spacing:0.03em;text-transform:uppercase;text-wrap:pretty">De a una pieza, sobre la mesa.</h2>
-      <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.85;opacity:0.74;text-wrap:pretty">Cada modelo nace de un molde propio. Trabajamos con seis costureras, encajes importados de Calais y seda lavada que se ablanda con el uso en vez de gastarse.</p>
-      <div class="atl-stats" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border-top:1px solid rgba(255,236,209,0.2);padding-top:24px">
+      <span style="font-size:10.5px;letter-spacing:0.34em;text-transform:uppercase;opacity:0.6">Sobre nosotros · Blossom Intimates</span>
+      <h2 style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(26px,3.6vw,48px);line-height:1.1;margin:0;letter-spacing:0.03em;text-transform:uppercase;text-wrap:pretty">Florecé a tu manera.</h2>
+      <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.85;opacity:0.74;text-wrap:pretty">En Blossom Intimates creemos que cada mujer merece sentirse hermosa, segura y auténtica. Nacimos con el propósito de ofrecer prendas que combinen delicadeza, comodidad y estilo, acompañándote en cada etapa y resaltando tu esencia.</p>
+      <p style="margin:0;max-width:44ch;font-size:15px;line-height:1.85;opacity:0.74;text-wrap:pretty">Más que una marca, queremos ser parte de esos pequeños momentos en los que te elegís, te cuidás y te sentís bien con vos misma.</p>
+      <div class="atl-stats" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border-top:1px solid rgba(255,236,209,0.2);padding-top:24px">
         <div>
-          <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">40</div>
-          <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-top:6px">piezas por modelo</div>
-        </div>
-        <div>
-          <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">85–110</div>
+          <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">XS – XXL</div>
           <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-top:6px">rango de talles</div>
         </div>
         <div>
-          <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">72 h</div>
+          <div style="font-family:Jost,sans-serif;font-weight:200;font-size:clamp(22px,2.4vw,32px);line-height:1.05;white-space:nowrap">24–48 h</div>
           <div style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;opacity:0.55;margin-top:6px">preparación del pedido</div>
         </div>
       </div>
@@ -737,13 +734,13 @@
 
         <sc-if value="{{ info.hasTable }}" hint-placeholder-val="{{ true }}">
           <div class="info-table">
-            <div class="info-table-inner">
-              <div class="it-row it-head">
-                <span>{{ info.hA }}</span><span>{{ info.hB }}</span><span>{{ info.hC }}</span><span>{{ info.hD }}</span>
+            <div class="info-table-inner" style="min-width:{{ info.minW }}">
+              <div class="it-row it-head" style="grid-template-columns:{{ info.cols }}">
+                <span>{{ info.hA }}</span><span>{{ info.hB }}</span><span>{{ info.hC }}</span><span style="display:{{ info.dShow }}">{{ info.hD }}</span>
               </div>
               <sc-for list="{{ info.rows }}" as="r" hint-placeholder-count="4">
-                <div class="it-row">
-                  <span>{{ r.a }}</span><span>{{ r.b }}</span><span>{{ r.c }}</span><span>{{ r.d }}</span>
+                <div class="it-row" style="grid-template-columns:{{ info.cols }}">
+                  <span>{{ r.a }}</span><span>{{ r.b }}</span><span>{{ r.c }}</span><span style="display:{{ info.dShow }}">{{ r.d }}</span>
                 </div>
               </sc-for>
             </div>
@@ -868,7 +865,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "90" };
+  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M" };
 
   componentDidMount() {
     requestAnimationFrame(() => this.reveal());
@@ -1044,7 +1041,7 @@ class Component extends DCLogic {
   openProduct(slot) {
     const it = this.catalog().find((x) => x.slot === slot);
     const color = it && it.colors && it.colors.length ? it.colors[0] : "";
-    this.setState({ view: "producto", product: slot, gIndex: 0, size: "90", color: color, menuOpen: false, bagOpen: false });
+    this.setState({ view: "producto", product: slot, gIndex: 0, size: "M", color: color, menuOpen: false, bagOpen: false });
   }
 
   productVals() {
@@ -1053,7 +1050,7 @@ class Component extends DCLogic {
     const it = all.find((x) => x.slot === this.state.product) || all[0];
     const gal = this.galleryFor(it);
     const gi = Math.min(this.state.gIndex, gal.length - 1);
-    const sizes = ["85", "90", "95", "100"];
+    const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
     const opciones = it.colors || [];
     const color = opciones.indexOf(this.state.color) >= 0 ? this.state.color : (opciones[0] || "");
     const similar = all.filter((x) => x.cat === it.cat && x.slot !== it.slot).slice(0, 4);
@@ -1175,20 +1172,19 @@ class Component extends DCLogic {
       talles: {
         kicker: "Ayuda",
         title: "Guía de talles",
-        intro: "Nuestros talles siguen el contorno de bajo busto en centímetros, de 85 a 110. Si estás entre dos, llevá el mayor: el encaje cede con el uso.",
+        intro: "Nuestros talles van del XS al XL. Buscá tus medidas en centímetros en la tabla; si estás entre dos, llevá el mayor: el encaje cede con el uso.",
         table: {
-          head: ["Talle", "Bajo busto", "Busto", "Cadera"],
+          head: ["Talle", "Busto", "Cintura", "Cadera"],
           rows: [
-            { a: "85", b: "68 – 72 cm", c: "83 – 87 cm", d: "90 – 94 cm" },
-            { a: "90", b: "73 – 77 cm", c: "88 – 92 cm", d: "95 – 99 cm" },
-            { a: "95", b: "78 – 82 cm", c: "93 – 97 cm", d: "100 – 104 cm" },
-            { a: "100", b: "83 – 87 cm", c: "98 – 102 cm", d: "105 – 109 cm" },
-            { a: "105", b: "88 – 92 cm", c: "103 – 107 cm", d: "110 – 114 cm" },
-            { a: "110", b: "93 – 97 cm", c: "108 – 112 cm", d: "115 – 119 cm" }
+            { a: "XS", b: "80 – 84 cm", c: "60 – 64 cm", d: "86 – 90 cm" },
+            { a: "S", b: "85 – 89 cm", c: "65 – 69 cm", d: "91 – 95 cm" },
+            { a: "M", b: "90 – 94 cm", c: "70 – 74 cm", d: "96 – 100 cm" },
+            { a: "L", b: "95 – 99 cm", c: "75 – 79 cm", d: "101 – 105 cm" },
+            { a: "XL", b: "100 – 104 cm", c: "80 – 84 cm", d: "106 – 110 cm" }
           ]
         },
         sections: [
-          { h: "Cómo tomar las medidas", p: "Medite sin ropa encima y con la cinta paralela al piso, apoyada pero sin apretar. El bajo busto se mide justo debajo del pecho; el busto, en la parte más ancha; la cadera, en el punto más amplio." },
+          { h: "Cómo tomar las medidas", p: "Medite sin ropa encima y con la cinta paralela al piso, apoyada pero sin apretar. El busto se mide en la parte más ancha del pecho; la cintura, en la parte más angosta del torso; la cadera, en el punto más amplio." },
           { h: "Si estás entre dos talles", p: "Elegí el mayor. Las piezas de encaje y tul ceden levemente con el uso, y los corsés de serie corta sientan mejor holgados que al límite." },
           { h: "Asesoría sin cargo", p: "Si tenés dudas, escribinos por WhatsApp con tus medidas y te decimos qué talle pedir antes de comprar." }
         ]
@@ -1196,18 +1192,18 @@ class Component extends DCLogic {
       envios: {
         kicker: "Ayuda",
         title: "Envíos y entregas",
-        intro: "Preparamos cada pedido en 72 horas hábiles y enviamos a todo el Paraguay en empaque neutro, sin referencias visibles al contenido ni a la marca.",
+        intro: "Preparamos cada pedido en 24 a 48 horas hábiles y enviamos a todo el Paraguay en empaque neutro, sin referencias visibles al contenido ni a la marca.",
         table: {
           head: ["Destino", "Plazo estimado", "Costo", "Seguimiento"],
           rows: [
-            { a: "Asunción y Gran Asunción", b: "24 – 48 h", c: "Gs. 25.000", d: "Sí" },
-            { a: "Interior del país", b: "3 – 5 días hábiles", c: "Gs. 45.000", d: "Sí" },
+            { a: "Asunción y Gran Asunción", b: "24 – 48 h", c: "Sujeto a cotización", d: "Sí" },
+            { a: "Interior del país", b: "3 – 5 días hábiles", c: "Sujeto a cotización", d: "Sí" },
             { a: "Retiro en el atelier", b: "A coordinar", c: "Sin cargo", d: "—" },
             { a: "Compras sobre Gs. 600.000", b: "Según destino", c: "Sin cargo", d: "Sí" }
           ]
         },
         sections: [
-          { h: "Preparación", p: "Al ser series de cuarenta piezas hechas a mano, el pedido se arma una vez confirmado el pago. Ese plazo de 72 horas es previo al despacho." },
+          { h: "Preparación", p: "Los pedidos son preparados una vez confirmado el pago." },
           { h: "Empaque discreto", p: "El paquete sale en caja neutra, sin logos ni descripción del contenido en la etiqueta. Solo figuran los datos del destinatario." },
           { h: "Seguimiento", p: "Te enviamos el número de guía por WhatsApp apenas se despacha el pedido." }
         ]
@@ -1215,13 +1211,8 @@ class Component extends DCLogic {
       cambios: {
         kicker: "Ayuda",
         title: "Cambios y devoluciones",
-        intro: "Aceptamos cambios dentro de los 15 días de recibido el pedido, siempre que la pieza esté sin uso, con su etiqueta y en su empaque original.",
-        sections: [
-          { h: "Qué se puede cambiar", p: "Corsetería, conjuntos, batas y piezas para dormir, por talle o por otro modelo del mismo valor. Si el modelo elegido vale más, se abona la diferencia." },
-          { h: "Qué no se puede cambiar", p: "Por razones de higiene no aceptamos cambios de bombachas, ni de piezas que hayan sido usadas, lavadas o que no conserven su etiqueta original." },
-          { h: "Cómo iniciarlo", p: "Escribinos por WhatsApp dentro de los 15 días con tu número de pedido. Coordinamos el retiro o el envío según dónde estés." },
-          { h: "Piezas con falla", p: "Si la pieza llegó con una falla de confección, la reponemos sin cargo y nos hacemos cargo del envío en ambos sentidos." }
-        ]
+        intro: "Por tratarse de prendas íntimas, no realizamos cambios ni devoluciones.",
+        sections: []
       },
       cuidado: {
         kicker: "Ayuda",
@@ -1247,18 +1238,17 @@ class Component extends DCLogic {
         title: "Tarjeta de regalo",
         intro: "Una tarjeta digital por el monto que elijas, sin vencimiento y válida para toda la colección. Llega por correo o por WhatsApp, lista para reenviar.",
         table: {
-          head: ["Monto", "Alcanza para", "Formato", "Vigencia"],
+          head: ["Monto", "Formato", "Vigencia"],
           rows: [
-            { a: "Gs. 300.000", b: "Una pieza de lencería", c: "Digital", d: "Sin vencimiento" },
-            { a: "Gs. 500.000", b: "Un conjunto", c: "Digital", d: "Sin vencimiento" },
-            { a: "Gs. 800.000", b: "Un corsé o una bata", c: "Digital", d: "Sin vencimiento" },
-            { a: "Monto libre", b: "A definir", c: "Digital", d: "Sin vencimiento" }
+            { a: "Gs. 300.000", b: "Digital", c: "Sin vencimiento" },
+            { a: "Gs. 500.000", b: "Digital", c: "Sin vencimiento" },
+            { a: "Gs. 800.000", b: "Digital", c: "Sin vencimiento" },
+            { a: "Monto libre", b: "Digital", c: "Sin vencimiento" }
           ]
         },
         sections: [
           { h: "Cómo se compra", p: "Escribinos por WhatsApp con el monto y el nombre de quien la recibe. Te pasamos los datos para el pago y emitimos la tarjeta el mismo día." },
-          { h: "Cómo se usa", p: "La tarjeta trae un código que se aplica al confirmar el pedido. Se puede usar en varias compras hasta agotar el saldo." },
-          { h: "Empaque", p: "Si preferís entregarla en mano, la imprimimos en papel de algodón dentro de un sobre neutro, sin cargo adicional." }
+          { h: "Cómo se usa", p: "La tarjeta trae un código que se aplica al confirmar el pedido. Se puede usar en varias compras hasta agotar el saldo." }
         ]
       },
       privacidad: {
@@ -1279,8 +1269,8 @@ class Component extends DCLogic {
         sections: [
           { h: "Precios y disponibilidad", p: "Los precios están expresados en guaraníes e incluyen impuestos. Trabajamos en series de cuarenta piezas por modelo: si una pieza se agota entre tu pedido y la confirmación, te avisamos y devolvemos el importe completo." },
           { h: "Pedidos y pagos", p: "El pedido queda confirmado una vez acreditado el pago. Nos reservamos el derecho de cancelar pedidos con datos incompletos o cuando no podamos verificar la operación." },
-          { h: "Plazos", p: "La preparación demora 72 horas hábiles y no incluye el tiempo de transporte. Los plazos de entrega son estimados y dependen de la empresa de logística." },
-          { h: "Cambios", p: "Las condiciones de cambio y devolución se detallan en su propia página y forman parte de estos términos." },
+          { h: "Plazos", p: "La preparación demora de 24 a 48 horas hábiles y no incluye el tiempo de transporte. Los plazos de entrega son estimados y dependen de la empresa de logística." },
+          { h: "Cambios", p: "Por tratarse de prendas íntimas, no realizamos cambios ni devoluciones." },
           { h: "Propiedad intelectual", p: "Las fotografías, los textos y los moldes de este sitio son de Blossom. No pueden reproducirse con fines comerciales sin autorización escrita." },
           { h: "Ley aplicable", p: "Estas condiciones se rigen por las leyes de la República del Paraguay y cualquier controversia se somete a los tribunales de Asunción." }
         ]
@@ -1309,11 +1299,13 @@ class Component extends DCLogic {
 
   infoVals() {
     const vacio = { kicker: "", title: "", intro: "", sections: [], rows: [], hasTable: false,
-                    hA: "", hB: "", hC: "", hD: "" };
+                    hA: "", hB: "", hC: "", hD: "", cols: "", dShow: "none", minW: "" };
     if (this.state.view !== "info") return { info: vacio };
     const pg = this.infoPages()[this.state.infoKey];
     if (!pg) return { info: vacio };
     const head = pg.table ? pg.table.head : ["", "", "", ""];
+    // las tablas pueden tener 3 o 4 columnas
+    const cuatro = head.length > 3;
     return {
       info: {
         kicker: pg.kicker,
@@ -1321,7 +1313,11 @@ class Component extends DCLogic {
         intro: pg.intro,
         sections: pg.sections || [],
         hasTable: !!pg.table,
-        hA: head[0], hB: head[1], hC: head[2], hD: head[3],
+        hA: head[0], hB: head[1], hC: head[2], hD: head[3] || "",
+        cols: cuatro ? "0.8fr 1fr 1fr 1fr" : "1fr 1fr 1fr",
+        dShow: cuatro ? "block" : "none",
+        // con 3 columnas la tabla entra en el celular sin desplazarse
+        minW: cuatro ? "" : "0",
         rows: pg.table ? pg.table.rows : []
       }
     };
