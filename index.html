@@ -293,6 +293,9 @@
     </div>
   </section>
 
+  <!-- Sin categorias publicadas la franja no se muestra: un titulo con la grilla
+       vacia abajo queda peor que no tener la seccion. -->
+  <sc-if value="{{ hayCategorias }}" hint-placeholder-val="{{ true }}">
   <section style="padding:clamp(48px,5vw,84px) clamp(20px,5vw,64px);background:#ffecd1;color:#3e000c">
     <div style="max-width:1500px;margin:0 auto">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(62,0,12,0.22);padding-bottom:16px;margin-bottom:clamp(22px,2.6vw,38px)">
@@ -322,6 +325,7 @@
           </sc-for>
     </div>
   </section>
+  </sc-if>
 
   <section style="padding:clamp(48px,6vw,90px) clamp(20px,5vw,64px);overflow:hidden">
     <div style="max-width:1100px;margin:0 auto">
@@ -509,6 +513,8 @@
               </sc-if>
             </div>
           </div>
+          <!-- Con una sola foto la tira repetia la misma imagen que ya se ve arriba. -->
+          <sc-if value="{{ product.hasMany }}" hint-placeholder-val="{{ true }}">
           <div style="display:grid;grid-template-columns:repeat({{ product.thumbCount }},1fr);gap:10px">
             <sc-for list="{{ product.gallery }}" as="g" hint-placeholder-count="3">
               <div onClick="{{ g.pick }}" style="cursor:pointer;background:#ffecd1;padding:5px;outline:{{ g.ring }};outline-offset:1px">
@@ -518,6 +524,7 @@
               </div>
             </sc-for>
           </div>
+          </sc-if>
         </div>
 
         <div class="pdp-info" style="display:flex;flex-direction:column;gap:22px;align-self:start;position:sticky;top:96px">
@@ -563,6 +570,9 @@
         </div>
       </div>
 
+      <!-- Con un solo producto publicado no hay piezas similares: se oculta la
+           seccion entera en vez de dejar el titulo con la grilla vacia. -->
+      <sc-if value="{{ product.hasSimilar }}" hint-placeholder-val="{{ true }}">
       <div style="background:#ffecd1;color:#3e000c;margin:clamp(48px,6vw,88px) calc(clamp(20px,5vw,64px) * -1) 0;padding:clamp(44px,5vw,76px) clamp(20px,5vw,64px)">
        <div style="max-width:1300px;margin:0 auto">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:1px solid rgba(62,0,12,0.2);padding-bottom:16px;margin-bottom:clamp(24px,3vw,40px)">
@@ -588,6 +598,7 @@
         </div>
        </div>
       </div>
+      </sc-if>
     </section>
   </sc-if>
 
@@ -729,7 +740,6 @@
       <div style="display:flex;flex-direction:column;gap:11px">
         <div style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;font-weight:600;opacity:0.8;margin-bottom:6px">Tienda</div>
         <a href="#coleccion" onClick="{{ goCatalogo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Colección</a>
-        <a href="#coleccion" onClick="{{ goCorseteria }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Corsetería</a>
         <a href="#lookbook" onClick="{{ goLookbook }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Lookbook</a>
         <a href="#tarjeta-de-regalo" onClick="{{ goRegalo }}" style="font-size:13.5px;opacity:0.82;color:#3e000c">Tarjeta de regalo</a>
       </div>
@@ -825,7 +835,7 @@ class Component extends DCLogic {
   static SCHEMA = "blossom";
   static ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc0MTAxNDYxLCJleHAiOjE5MzE3ODE0NjF9.7_wAph8IolPMXtgfpezSwS5XR62IdD__qhqCywLDp3Q";
 
-  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M", catalogo: null, categoriasWeb: [], contacto: null };
+  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M", catalogo: null, categoriasWeb: [], contacto: null, tiendaCargada: false };
 
   async fetchVista(nombre) {
     const r = await fetch(Component.API + "/" + nombre + "?select=*", {
@@ -881,6 +891,8 @@ class Component extends DCLogic {
         catalogo: catalogo.length ? catalogo : null,
         categoriasWeb: cats || [],
         contacto: (contacto && contacto[0]) || null,
+        // El ERP contesto: desde aca manda el, aunque alguna lista venga vacia.
+        tiendaCargada: catalogo.length > 0,
       });
     } catch (e) {
       // Sin datos del ERP la pagina igual carga, con el catalogo de respaldo.
@@ -1001,6 +1013,22 @@ class Component extends DCLogic {
     els.forEach((el) => { if (!el.dataset.shown) this._io.observe(el); });
   }
 
+  /**
+   * Nombres de categoria que realmente existen en el catalogo mostrado.
+   * Los filtros se arman con esto y no con una lista fija: con datos del ERP,
+   * una lista fija ofrece categorias sin un solo producto detras y al tocarlas
+   * la pantalla queda vacia.
+   */
+  catNamesDisponibles() {
+    const vistos = [];
+    for (const it of this.catalog()) {
+      const c = (it.cat || "").trim();
+      if (c && vistos.indexOf(c) < 0) vistos.push(c);
+    }
+    if (vistos.length) return vistos;
+    return ["Conjuntos", "Corsetería", "Batas", "Dormir"];
+  }
+
   catalog() {
     // Lo que publica el ERP manda. El array de abajo queda como respaldo para
     // que la pagina nunca se vea vacia si la API no responde.
@@ -1094,7 +1122,22 @@ class Component extends DCLogic {
     const it = all.find((x) => x.slot === this.state.product) || all[0];
     const gal = this.galleryFor(it);
     const gi = Math.min(this.state.gIndex, gal.length - 1);
-    const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+    // Los talles salen del ERP: solo los que el producto tiene con stock. Antes
+    // era una lista fija XS-XXL y la pagina ofrecia talles inexistentes.
+    const ORDEN = ["XS", "S", "M", "L", "XL", "XXL"];
+    const propios = Array.isArray(it.talles) ? it.talles.filter(Boolean) : [];
+    const sizes = propios.length
+      ? propios.slice().sort((a, b) => {
+          const ia = ORDEN.indexOf(a), ib = ORDEN.indexOf(b);
+          // Los que no estan en la escala conocida van al final, alfabeticos.
+          if (ia < 0 && ib < 0) return String(a).localeCompare(String(b));
+          if (ia < 0) return 1;
+          if (ib < 0) return -1;
+          return ia - ib;
+        })
+      : ORDEN;
+    // Si el talle elegido no existe en este producto, se cae al primero.
+    const sizeSel = sizes.indexOf(this.state.size) >= 0 ? this.state.size : sizes[0];
     const opciones = it.colors || [];
     const color = opciones.indexOf(this.state.color) >= 0 ? this.state.color : (opciones[0] || "");
     const similar = all.filter((x) => x.cat === it.cat && x.slot !== it.slot).slice(0, 4);
@@ -1120,10 +1163,11 @@ class Component extends DCLogic {
         })),
         sizes: sizes.map((label) => ({
           label,
-          bg: this.state.size === label ? "#ffecd1" : "transparent",
-          fg: this.state.size === label ? "#3e000c" : "#ffecd1",
+          bg: sizeSel === label ? "#ffecd1" : "transparent",
+          fg: sizeSel === label ? "#3e000c" : "#ffecd1",
           pick: () => this.setState({ size: label }),
         })),
+        sizeSel,
         colorName: color,
         hasColors: opciones.length > 1,
         colors: opciones.map((label) => ({
@@ -1134,6 +1178,7 @@ class Component extends DCLogic {
           pick: () => this.setState({ color: label }),
         })),
         add: () => this.addLine(it.name, { size: this.state.size, color: color }),
+        hasSimilar: simList.length > 0,
         similar: simList.map((x) => ({
           slot: "pdp-sim-" + x.slot,
           name: x.name,
@@ -1158,8 +1203,13 @@ class Component extends DCLogic {
       { nombre: "Dormir", descripcion: "Slips y camisones al bies.", imagen_url: this.px(7162037) },
     ];
     const web = this.state.categoriasWeb || [];
-    const fuente = web.length ? web : CAT_FALLBACK;
+    // Todo o nada: si el ERP ya esta publicando productos, no se mezclan con las
+    // categorias de demostracion. Antes se mostraban las cuatro fijas y al
+    // tocarlas el catalogo filtraba por un nombre que ningun producto tenia, asi
+    // que la pantalla quedaba vacia.
+    const fuente = this.state.tiendaCargada ? web : (web.length ? web : CAT_FALLBACK);
     return {
+      hayCategorias: fuente.length > 0,
       categoriasSubtitulo: fuente.length === 4 ? "Cuatro familias" : fuente.length + " familias",
       categorias: fuente.map((c, k) => ({
         slot: "v2-cat-" + (c.id || k),
@@ -1198,7 +1248,7 @@ class Component extends DCLogic {
     if (this.state.sort === "asc") list = list.slice().sort((a, b) => a.p - b.p);
     else if (this.state.sort === "desc") list = list.slice().sort((a, b) => b.p - a.p);
 
-    const catNames = ["Todo", "Conjuntos", "Corsetería", "Batas", "Dormir"];
+    const catNames = ["Todo"].concat(this.catNamesDisponibles());
     const categories = catNames.map((label) => {
       const active = this.state.cat === label;
       return {
@@ -1545,7 +1595,7 @@ class Component extends DCLogic {
       openMenu: () => this.setState({ menuOpen: true }),
       closeMenu: () => this.setState({ menuOpen: false }),
       toggleMenu: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState((s) => ({ menuOpen: !s.menuOpen, bagOpen: false })); },
-      menuCats: ["Conjuntos", "Corsetería", "Batas", "Dormir"].map((label) => ({
+      menuCats: this.catNamesDisponibles().map((label) => ({
         label,
         pick: (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ view: "catalogo", cat: label, band: "Todo", menuOpen: false, bagOpen: false }); },
       })),
