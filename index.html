@@ -297,82 +297,29 @@
     <div style="max-width:1500px;margin:0 auto">
       <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid rgba(62,0,12,0.22);padding-bottom:16px;margin-bottom:clamp(22px,2.6vw,38px)">
         <span style="font-size:10.5px;letter-spacing:0.32em;text-transform:uppercase;font-weight:500;opacity:0.85">Categorías</span>
-        <span style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;opacity:0.7">Cuatro familias</span>
+        <span style="font-size:10.5px;letter-spacing:0.2em;text-transform:uppercase;font-weight:500;opacity:0.7">{{ categoriasSubtitulo }}</span>
       </div>
       <div class="cat-grid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,26px)">
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="display:flex;flex-direction:column;gap:0;text-decoration:none;color:#3e000c;transition:transform .55s cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-8px)">
-          <div style="position:relative;background:#3e000c;padding:clamp(7px,0.7vw,11px);overflow:hidden">
-            <div style="position:relative;aspect-ratio:3/4;overflow:hidden">
-              <div style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.09)">
-                <image-slot id="v2-cat1" src="uploads/pexels-karola-g-7281288.jpg" shape="rect" fit="cover" placeholder="Conjuntos"></image-slot>
+          <sc-for list="{{ categorias }}" as="c" hint-placeholder-count="4">
+            <a href="#coleccion" onClick="{{ c.open }}" style="display:flex;flex-direction:column;gap:0;text-decoration:none;color:#3e000c;transition:transform .55s cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-8px)">
+              <div style="position:relative;background:#3e000c;padding:clamp(7px,0.7vw,11px);overflow:hidden">
+                <div style="position:relative;aspect-ratio:3/4;overflow:hidden">
+                  <div style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.09)">
+                    <image-slot id="{{ c.slot }}" src="{{ c.src }}" shape="rect" fit="cover" placeholder="{{ c.nombre }}"></image-slot>
+                  </div>
+                  <div class="hover-veil" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(62,0,12,0) 55%,rgba(62,0,12,0.55) 100%);opacity:0;transition:opacity .55s ease;pointer-events:none" style-hover="opacity:1"></div>
+                  <div class="hover-label" style="position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;color:#ffecd1;padding:0 16px 16px;transform:translateY(12px);opacity:0;transition:all .55s cubic-bezier(.22,.61,.36,1);pointer-events:none" style-hover="transform:translateY(0);opacity:1">
+                    <span style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase">Ver piezas</span>
+                    <span style="font-size:13px">→</span>
+                  </div>
+                </div>
               </div>
-              <div class="hover-veil" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(62,0,12,0) 55%,rgba(62,0,12,0.55) 100%);opacity:0;transition:opacity .55s ease;pointer-events:none" style-hover="opacity:1"></div>
-              <div class="hover-label" style="position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;color:#ffecd1;padding:0 16px 16px;transform:translateY(12px);opacity:0;transition:all .55s cubic-bezier(.22,.61,.36,1);pointer-events:none" style-hover="transform:translateY(0);opacity:1">
-                <span style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase">Ver piezas</span>
-                <span style="font-size:13px">→</span>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 2px 0">
+                <span style="font-family:Jost,sans-serif;font-weight:400;font-size:clamp(13px,1.1vw,16px);letter-spacing:0.16em;text-transform:uppercase">{{ c.nombre }}</span>
               </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 2px 0">
-            <span style="font-family:Jost,sans-serif;font-weight:400;font-size:clamp(13px,1.1vw,16px);letter-spacing:0.16em;text-transform:uppercase">Conjuntos</span>
-          </div>
-          <div style="font-size:11px;letter-spacing:0.06em;opacity:0.62;padding:6px 2px 0">Encaje y tul, de dos piezas.</div>
-        </a>
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="display:flex;flex-direction:column;gap:0;text-decoration:none;color:#3e000c;transition:transform .55s cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-8px)">
-          <div style="position:relative;background:#3e000c;padding:clamp(7px,0.7vw,11px);overflow:hidden">
-            <div style="position:relative;aspect-ratio:3/4;overflow:hidden">
-              <div style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.09)">
-                <image-slot id="v2-cat2" src="https://images.pexels.com/photos/6568220/pexels-photo-6568220.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" shape="rect" fit="cover" placeholder="Corsetería"></image-slot>
-              </div>
-              <div class="hover-veil" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(62,0,12,0) 55%,rgba(62,0,12,0.55) 100%);opacity:0;transition:opacity .55s ease;pointer-events:none" style-hover="opacity:1"></div>
-              <div class="hover-label" style="position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;color:#ffecd1;padding:0 16px 16px;transform:translateY(12px);opacity:0;transition:all .55s cubic-bezier(.22,.61,.36,1);pointer-events:none" style-hover="transform:translateY(0);opacity:1">
-                <span style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase">Ver piezas</span>
-                <span style="font-size:13px">→</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 2px 0">
-            <span style="font-family:Jost,sans-serif;font-weight:400;font-size:clamp(13px,1.1vw,16px);letter-spacing:0.16em;text-transform:uppercase">Corsetería</span>
-          </div>
-          <div style="font-size:11px;letter-spacing:0.06em;opacity:0.62;padding:6px 2px 0">Estructura suave, sin varillas.</div>
-        </a>
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="display:flex;flex-direction:column;gap:0;text-decoration:none;color:#3e000c;transition:transform .55s cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-8px)">
-          <div style="position:relative;background:#3e000c;padding:clamp(7px,0.7vw,11px);overflow:hidden">
-            <div style="position:relative;aspect-ratio:3/4;overflow:hidden">
-              <div style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.09)">
-                <image-slot id="v2-cat3" src="https://images.pexels.com/photos/16455727/pexels-photo-16455727.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" shape="rect" fit="cover" placeholder="Batas"></image-slot>
-              </div>
-              <div class="hover-veil" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(62,0,12,0) 55%,rgba(62,0,12,0.55) 100%);opacity:0;transition:opacity .55s ease;pointer-events:none" style-hover="opacity:1"></div>
-              <div class="hover-label" style="position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;color:#ffecd1;padding:0 16px 16px;transform:translateY(12px);opacity:0;transition:all .55s cubic-bezier(.22,.61,.36,1);pointer-events:none" style-hover="transform:translateY(0);opacity:1">
-                <span style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase">Ver piezas</span>
-                <span style="font-size:13px">→</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 2px 0">
-            <span style="font-family:Jost,sans-serif;font-weight:400;font-size:clamp(13px,1.1vw,16px);letter-spacing:0.16em;text-transform:uppercase">Batas</span>
-          </div>
-          <div style="font-size:11px;letter-spacing:0.06em;opacity:0.62;padding:6px 2px 0">Seda lavada y satén.</div>
-        </a>
-        <a href="#coleccion" onClick="{{ goCatalogo }}" style="display:flex;flex-direction:column;gap:0;text-decoration:none;color:#3e000c;transition:transform .55s cubic-bezier(.22,.61,.36,1)" style-hover="transform:translateY(-8px)">
-          <div style="position:relative;background:#3e000c;padding:clamp(7px,0.7vw,11px);overflow:hidden">
-            <div style="position:relative;aspect-ratio:3/4;overflow:hidden">
-              <div style="position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.22,.61,.36,1)" style-hover="transform:scale(1.09)">
-                <image-slot id="v2-cat4" src="https://images.pexels.com/photos/7162037/pexels-photo-7162037.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=900" shape="rect" fit="cover" placeholder="Dormir"></image-slot>
-              </div>
-              <div class="hover-veil" style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(62,0,12,0) 55%,rgba(62,0,12,0.55) 100%);opacity:0;transition:opacity .55s ease;pointer-events:none" style-hover="opacity:1"></div>
-              <div class="hover-label" style="position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:8px;color:#ffecd1;padding:0 16px 16px;transform:translateY(12px);opacity:0;transition:all .55s cubic-bezier(.22,.61,.36,1);pointer-events:none" style-hover="transform:translateY(0);opacity:1">
-                <span style="font-size:10px;letter-spacing:0.24em;text-transform:uppercase">Ver piezas</span>
-                <span style="font-size:13px">→</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:16px 2px 0">
-            <span style="font-family:Jost,sans-serif;font-weight:400;font-size:clamp(13px,1.1vw,16px);letter-spacing:0.16em;text-transform:uppercase">Dormir</span>
-          </div>
-          <div style="font-size:11px;letter-spacing:0.06em;opacity:0.62;padding:6px 2px 0">Slips y camisones al bies.</div>
-        </a>
-      </div>
+              <div style="font-size:11px;letter-spacing:0.06em;opacity:0.62;padding:6px 2px 0">{{ c.descripcion }}</div>
+            </a>
+          </sc-for>
     </div>
   </section>
 
@@ -868,9 +815,74 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M" };
+  // ---------------------------------------------------------------------------
+  // Datos del ERP. El sitio lee tres vistas publicas del schema `blossom` con la
+  // anon key, que solo puede leer lo que esta marcado como visible en la web.
+  // Si Supabase no responde, se cae al catalogo de respaldo de mas abajo y la
+  // pagina sigue funcionando.
+  // ---------------------------------------------------------------------------
+  static API = "https://api.neura.com.py/rest/v1";
+  static ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc0MTAxNDYxLCJleHAiOjE5MzE3ODE0NjF9.7_wAph8IolPMXtgfpezSwS5XR62IdD__qhqCywLDp3Q";
+
+  state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M", catalogo: null, categoriasWeb: [], contacto: null };
+
+  async fetchVista(nombre) {
+    const r = await fetch(Component.API + "/" + nombre + "?select=*", {
+      headers: { apikey: Component.ANON, Authorization: "Bearer " + Component.ANON },
+    });
+    if (!r.ok) throw new Error(nombre + ": " + r.status);
+    return r.json();
+  }
+
+  /** Lleva una fila de `web_productos` a la forma que ya usa toda la pagina. */
+  mapProducto(row) {
+    const galeria = Array.isArray(row.galeria) ? row.galeria : [];
+    const colores = Array.isArray(row.colores) ? row.colores : [];
+    const variantes = Array.isArray(row.variantes) ? row.variantes : [];
+    const talles = [];
+    for (const v of variantes) {
+      if (v && v.talle && talles.indexOf(v.talle) < 0) talles.push(v.talle);
+    }
+    return {
+      // `slot` identifica la pieza en la UI y en los ids de image-slot.
+      slot: "p" + row.id,
+      id: row.id,
+      name: row.nombre || "",
+      cat: row.categoria_nombre || "Sin categoria",
+      p: Number(row.precio_venta) || 0,
+      detail: row.descripcion || "",
+      src: row.imagen_url || (galeria[0] && galeria[0].url) || "",
+      colors: colores.map((c) => c.nombre).filter(Boolean),
+      coloresFull: colores,
+      gallery: galeria.map((g) => g.url).filter(Boolean),
+      talles: talles,
+      destacado: row.destacado === true,
+      orden: Number(row.orden_web) || 0,
+    };
+  }
+
+  async loadTienda() {
+    try {
+      const [prods, cats, contacto] = await Promise.all([
+        this.fetchVista("web_productos"),
+        this.fetchVista("web_categorias"),
+        this.fetchVista("web_contacto"),
+      ]);
+      const catalogo = (prods || []).map((r) => this.mapProducto(r));
+      catalogo.sort((a, b) => a.orden - b.orden || a.name.localeCompare(b.name));
+      this.setState({
+        catalogo: catalogo.length ? catalogo : null,
+        categoriasWeb: cats || [],
+        contacto: (contacto && contacto[0]) || null,
+      });
+    } catch (e) {
+      // Sin datos del ERP la pagina igual carga, con el catalogo de respaldo.
+      console.warn("[tienda] no se pudo leer el ERP:", e && e.message);
+    }
+  }
 
   componentDidMount() {
+    this.loadTienda();
     requestAnimationFrame(() => this.reveal());
     this.setupScrollWatch();
     this.syncHeader();
@@ -893,7 +905,14 @@ class Component extends DCLogic {
   }
 
   featuredList() {
-    return this.catalog().filter((it) => ["c1", "c3", "c11", "c7", "c8", "c12"].indexOf(it.slot) >= 0);
+    const todos = this.catalog();
+    // Con datos del ERP mandan los marcados como destacados; si no hay ninguno
+    // se muestran los primeros para no dejar la franja vacia.
+    if (this.state.catalogo && this.state.catalogo.length) {
+      const dest = todos.filter((it) => it.destacado);
+      return dest.length ? dest : todos.slice(0, 6);
+    }
+    return todos.filter((it) => ["c1", "c3", "c11", "c7", "c8", "c12"].indexOf(it.slot) >= 0);
   }
 
   setupScrollWatch() {
@@ -976,6 +995,9 @@ class Component extends DCLogic {
   }
 
   catalog() {
+    // Lo que publica el ERP manda. El array de abajo queda como respaldo para
+    // que la pagina nunca se vea vacia si la API no responde.
+    if (this.state.catalogo && this.state.catalogo.length) return this.state.catalogo;
     const px = (id, w) => 'https://images.pexels.com/photos/' + id + '/pexels-photo-' + id + '.jpeg?auto=compress&cs=tinysrgb&w=' + (w || 900);
     return [
       { slot: 'c1', name: 'Conjunto Aurore', cat: 'Conjuntos', p: 385000, detail: 'Chantilly · Bordó', src: 'uploads/pexels-alexandros-iosifidis-82664041-8814538.jpg', colors: ["Bordó", "Crema", "Nude"] },
@@ -1008,6 +1030,12 @@ class Component extends DCLogic {
   // Cambiar aca y queda actualizado en la burbuja, en el pie y en el
   // boton de finalizar compra.
   waNumber() {
+    const c = this.state.contacto;
+    // El ERP lo puede guardar como "0994 244 449": se normaliza a formato wa.me.
+    if (c && c.whatsapp) {
+      const d = String(c.whatsapp).replace(/[^0-9]/g, '');
+      if (d.length >= 8) return d.startsWith('595') ? d : '595' + d.replace(/^0+/, '');
+    }
     return '595994244449';
   }
 
@@ -1020,6 +1048,8 @@ class Component extends DCLogic {
   }
 
   galleryFor(it) {
+    // Galeria cargada desde el ERP (hasta 4 fotos).
+    if (it.gallery && it.gallery.length) return it.gallery;
     const g = {
       c1: [it.src, this.px(6130839), this.px(6568222)],
       c2: [it.src, this.px(6568233), this.px(5885378)],
@@ -1038,6 +1068,10 @@ class Component extends DCLogic {
   }
 
   descFor(it) {
+    // Con datos del ERP la descripcion es la que cargo el admin.
+    if (this.state.catalogo && this.state.catalogo.length) {
+      return it.detail || "";
+    }
     return "Pieza en " + it.detail.split(" · ")[0].toLowerCase() + ", de la serie otoño. Corte a mano sobre molde propio, costuras invisibles y terminación en tono " + (it.detail.split(" · ")[1] || "crema").toLowerCase() + ". Pensada para usarse temporada tras temporada.";
   }
 
@@ -1102,6 +1136,31 @@ class Component extends DCLogic {
           open: () => this.openProduct(x.slot),
         })),
       },
+    };
+  }
+
+  /**
+   * Categorias de la franja del home. Salen del ERP; si todavia no cargaron
+   * —o la API no responde— se usan las que estaban fijas en la pagina.
+   */
+  categoriaVals() {
+    const CAT_FALLBACK = [
+      { nombre: "Conjuntos", descripcion: "Encaje y tul, de dos piezas.", imagen_url: "uploads/pexels-karola-g-7281288.jpg" },
+      { nombre: "Corseteria", descripcion: "Estructura y sosten.", imagen_url: this.px(6568220) },
+      { nombre: "Batas", descripcion: "Seda y saten al cuerpo.", imagen_url: this.px(16455727) },
+      { nombre: "Dormir", descripcion: "Slips y camisones al bies.", imagen_url: this.px(7162037) },
+    ];
+    const web = this.state.categoriasWeb || [];
+    const fuente = web.length ? web : CAT_FALLBACK;
+    return {
+      categoriasSubtitulo: fuente.length === 4 ? "Cuatro familias" : fuente.length + " familias",
+      categorias: fuente.map((c, k) => ({
+        slot: "v2-cat-" + (c.id || k),
+        nombre: c.nombre || "",
+        descripcion: c.descripcion || "",
+        src: c.imagen_url || "",
+        open: () => this.setState({ view: "catalogo", cat: c.nombre || "Todo", menuOpen: false, bagOpen: false }),
+      })),
     };
   }
 
@@ -1504,6 +1563,7 @@ class Component extends DCLogic {
         window.open(this.waLink(msg), "_blank", "noopener");
       },
       stop: (e) => e.stopPropagation(),
+      ...this.categoriaVals(),
       ...this.catalogVals(),
       ...this.featuredVals(),
       ...this.productVals(),
