@@ -822,13 +822,20 @@ class Component extends DCLogic {
   // pagina sigue funcionando.
   // ---------------------------------------------------------------------------
   static API = "https://api.neura.com.py/rest/v1";
+  static SCHEMA = "blossom";
   static ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlzcyI6InN1cGFiYXNlIiwiaWF0IjoxNzc0MTAxNDYxLCJleHAiOjE5MzE3ODE0NjF9.7_wAph8IolPMXtgfpezSwS5XR62IdD__qhqCywLDp3Q";
 
   state = { bag: [], bagOpen: false, toast: "", view: "home", menuOpen: false, scrolled: false, searchOpen: false, q: "", infoKey: "talles", color: "", cat: "Todo", band: "Todo", sort: "rel", feat: 0, product: null, gIndex: 0, size: "M", catalogo: null, categoriasWeb: [], contacto: null };
 
   async fetchVista(nombre) {
     const r = await fetch(Component.API + "/" + nombre + "?select=*", {
-      headers: { apikey: Component.ANON, Authorization: "Bearer " + Component.ANON },
+      headers: {
+        apikey: Component.ANON,
+        Authorization: "Bearer " + Component.ANON,
+        // Sin esto PostgREST responde sobre el schema `public` y devuelve 404:
+        // las vistas de la tienda viven en el schema del ERP.
+        "Accept-Profile": Component.SCHEMA,
+      },
     });
     if (!r.ok) throw new Error(nombre + ": " + r.status);
     return r.json();
