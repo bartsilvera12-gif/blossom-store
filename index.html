@@ -504,7 +504,9 @@
     <section style="padding:clamp(24px,3vw,44px) clamp(20px,5vw,64px) clamp(56px,7vw,96px)">
       <div style="max-width:1300px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(28px,4vw,64px)">
         <div style="display:flex;flex-direction:column;gap:14px">
-          <div style="background:#ffecd1;padding:clamp(10px,1vw,16px)">
+          <!-- La foto se limita a lo que entra en pantalla: el alto disponible (menos header,
+               breadcrumb y margenes) por 0.8, que es el ancho que corresponde al 4/5. -->
+          <div style="background:#ffecd1;padding:clamp(10px,1vw,16px);width:100%;max-width:min(100%,calc((100svh - 230px) * 0.8))">
             <div style="position:relative;aspect-ratio:4/5;overflow:hidden">
               <image-slot id="{{ product.mainSlot }}" src="{{ product.mainSrc }}" shape="rect" fit="cover" placeholder="Pieza"></image-slot>
               <sc-if value="{{ product.hasMany }}" hint-placeholder-val="{{ false }}">
@@ -515,7 +517,7 @@
           </div>
           <!-- Con una sola foto la tira repetia la misma imagen que ya se ve arriba. -->
           <sc-if value="{{ product.hasMany }}" hint-placeholder-val="{{ true }}">
-          <div style="display:grid;grid-template-columns:repeat({{ product.thumbCount }},1fr);gap:10px">
+          <div style="display:grid;grid-template-columns:repeat({{ product.thumbCount }},1fr);gap:10px;width:100%;max-width:min(100%,calc((100svh - 230px) * 0.8))">
             <sc-for list="{{ product.gallery }}" as="g" hint-placeholder-count="3">
               <div onClick="{{ g.pick }}" style="cursor:pointer;background:#ffecd1;padding:5px;outline:{{ g.ring }};outline-offset:1px">
                 <div style="position:relative;aspect-ratio:1/1;overflow:hidden">
