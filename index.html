@@ -506,7 +506,7 @@
         <div style="display:flex;flex-direction:column;gap:14px">
           <div style="background:#ffecd1;padding:clamp(10px,1vw,16px)">
             <div style="position:relative;aspect-ratio:4/5;overflow:hidden">
-              <image-slot id="{{ product.mainSlot }}" src="{{ product.mainSrc }}" shape="rect" fit="cover" placeholder="Pieza"></image-slot>
+              <image-slot id="{{ product.mainSlot }}" src="{{ product.mainSrc }}" shape="rect" fit="contain" placeholder="Pieza"></image-slot>
               <sc-if value="{{ product.hasMany }}" hint-placeholder-val="{{ false }}">
                 <span onClick="{{ product.prev }}" style="position:absolute;top:50%;left:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">←</span>
                 <span onClick="{{ product.next }}" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#26000A;border:1px solid rgba(255,236,209,0.55);color:#ffecd1;font-size:16px;cursor:pointer;z-index:3" style-hover="background:#ffecd1;color:#3e000c;border-color:#ffecd1">→</span>
@@ -1629,6 +1629,39 @@ class Component extends DCLogic {
     };
   }
 }
+</script>
+
+<script>
+/*
+ * La foto grande de la ficha se muestra entera (fit="contain"). Para que no
+ * queden franjas vacias arriba y abajo cuando la foto es apaisada, el marco
+ * toma la proporcion real de la imagen, sin pasar nunca de 4/5 de alto.
+ */
+(function () {
+  var BASE = 4 / 5; // proporcion original del marco
+  function ajustar() {
+    document.querySelectorAll('image-slot[id^="pdp-main"]').forEach(function (slot) {
+      var marco = slot.closest('div[style*="aspect-ratio"]');
+      var panel = marco && marco.parentElement;      // el recuadro crema
+      var col = panel && panel.parentElement;        // la columna de la grilla
+      if (!marco || !panel || !col) return;
+      var img = (slot.shadowRoot || slot).querySelector('img');
+      if (!img || !img.naturalWidth || !img.naturalHeight) {
+        if (img) img.addEventListener('load', ajustar, { once: true });
+        return;
+      }
+      var ar = img.naturalWidth / img.naturalHeight;
+      var pad = (parseFloat(getComputedStyle(panel).paddingLeft) || 0) * 2;
+      // Alto maximo: el que tenia el marco 4/5 a todo el ancho de la columna.
+      var altoMax = (col.clientWidth - pad) / BASE;
+      marco.style.aspectRatio = ar.toFixed(4) + ' / 1';
+      panel.style.width = 'min(100%, ' + Math.round(altoMax * ar + pad) + 'px)';
+    });
+  }
+  new MutationObserver(ajustar).observe(document.body, { childList: true, subtree: true });
+  window.addEventListener('load', ajustar);
+  setInterval(ajustar, 1000);
+})();
 </script>
 </body>
 </html>
